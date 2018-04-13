@@ -88,7 +88,7 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 
 const (
 	// StaticAssets is the root directory for public assets like images, css, js.
-	StaticAssets = "./public/"
+	StaticAssets = "../github.com/alezh/novel/public/"
 	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
 	Favicon = "favicon.ico"
 )
@@ -104,7 +104,7 @@ func (b *Bootstrapper) Configure(cs ...Configurator) {
 //
 // Returns itself.
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
-	b.SetupViews("./views",false)
+	b.SetupViews("../github.com/alezh/novel/views",false)
 	b.SetupSessions(24*time.Hour,
 		[]byte("the-big-and-secret-fash-key-here"),
 		[]byte("lot-secret-of-characters-big-too"),
