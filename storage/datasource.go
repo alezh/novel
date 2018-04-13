@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"errors"
 	"github.com/go-xorm/xorm"
 	_"github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/core"
@@ -58,10 +57,10 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 		panic("orm failed to initialized")
 		//return nil,errors.New("orm failed to initialized")
 	}
-	if errs := engine.Ping(); errs!=nil{
-		panic("orm failed to initialized")
-		//return nil,errors.New("orm failed to initialized")
-	}
+	//if errs := engine.Ping(); errs!=nil{
+	//	panic("orm failed to initialized")
+	//	//return nil,errors.New("orm failed to initialized")
+	//}
 	if d.Prefix == ""{
 		engine.SetTableMapper(core.SnakeMapper{})
 	}else{

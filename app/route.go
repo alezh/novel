@@ -1,21 +1,20 @@
-package admin
+package app
 
 import (
-	"github.com/alezh/novel/app"
 	"github.com/kataras/iris/mvc"
 	"github.com/alezh/novel/app/admin/controller"
 	"github.com/alezh/novel/storage"
 )
 
 func init()  {
-	app.AddRoute(Routes)
+
 }
 
-func Routes(m *mvc.Application)  {
+func AdminRoutes(m *mvc.Application)  {
 	admin := m.Party("/Admin")
 	admin.Register(
 		storage.Source,
-		app.WebApp.App.Sessions.Start,
+		webApp.Sessions.Start,
 	)
 	admin.Handle(new(controller.AdminController))
 }

@@ -2,23 +2,28 @@ package app
 
 import (
 	"github.com/kataras/iris/mvc"
-	"github.com/alezh/novel/bootstrap"
-	_ "github.com/alezh/novel/app/admin"
-	//引入路由
+	"github.com/kataras/iris"
 )
 
 var ConfigureMVC = make([]func(*mvc.Application),0)
 
-func init(){
-
+func init() {
+	AddRoute(AdminRoutes)
 }
+
 
 func AddRoute(f func(*mvc.Application)){
 	ConfigureMVC = append(ConfigureMVC,f)
 }
 
-func MvcBind(app *bootstrap.Bootstrapper)  {
+func MvcBind()  {
 	if len(ConfigureMVC)>0{
-		mvc.Configure(app, ConfigureMVC...)
+		mvc.Configure(webApp, ConfigureMVC...)
 	}
+}
+
+func Configure(app *iris.Application) {
+	app.Configure(
+		iris.WithoutServerError(iris.ErrServerClosed),
+	)
 }
