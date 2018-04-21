@@ -6,16 +6,22 @@ import (
 	"github.com/go-xorm/core"
 	"strconv"
 	"github.com/alezh/novel/config"
+	"gopkg.in/mgo.v2"
+	"fmt"
 )
 
 var Source *DataSource
 
 type (
 
-	Db interface {
+	MySqlDb interface {
 		Mysql()(*xorm.Engine)
 	}
+	MgoDB interface {
+		MongoDb() *MongoDb
+	}
 	DbConfig struct {
+		DbIp    string
 		DbName  string                  //db name
 		DbPort  int                     //3306
 		DbUser  string                  //root
@@ -24,19 +30,37 @@ type (
 		Prefix  string                  //prefix_
 		ShowSQL bool                    //true则会在控制台打印出生成的SQL语句；
 	}
+	MgoConfig struct {
+		MgoIP string
+		MgoDB string
+		MgoUser string
+		MgoPass string
+		MgoPort int
+		Collection string
+		PoolLimit int
+	}
+	MongoDb struct {
+		Session *mgo.Session
+		Database *mgo.Database
+		Collection *mgo.Collection
+	}
 	DataSource struct {
 		Mysql   *xorm.Engine
+		MongoDb *MongoDb
+
 	}
 )
 
 func init()  {
 	Source =  &DataSource{
 		NewMysqlSource().Mysql(),
+		NewMongoDBSource().MongoDb(),
 	}
 }
 
-func NewMysqlSource() Db {
+func NewMysqlSource() MySqlDb {
 	return &DbConfig{
+		config.MYSQL_IP,
 		config.MYSQL_DB,
 		config.MYSQL_PORT,
 		config.MYSQL_USER,
@@ -47,9 +71,25 @@ func NewMysqlSource() Db {
 	}
 }
 
+func NewMongoDBSource() MgoDB {
+	return &MgoConfig{
+		config.MGO_URL,
+		config.MGO_DB,
+		config.MGO_USER,
+		config.MGO_PASS,
+		config.MGO_PORT,
+		config.COLLECTION,
+		config.MGO_POOL,
+	}
+}
+
 func (d *DbConfig)Mysql() (*xorm.Engine){
 
-	dataSourceName := d.DbUser+":"+d.DbPass+"@:"+ strconv.Itoa(d.DbPort) +"/"+d.DbName+"?charset="+d.Charset
+	if d.DbIp == ""{
+		return nil
+	}
+
+	dataSourceName := d.DbUser+":"+d.DbPass+"@tcp("+d.DbIp+":"+ strconv.Itoa(d.DbPort) +")/"+d.DbName+"?charset="+d.Charset
 
 	engine, err := xorm.NewEngine("mysql", dataSourceName)
 
@@ -57,10 +97,10 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 		panic("orm failed to initialized")
 		//return nil,errors.New("orm failed to initialized")
 	}
-	//if errs := engine.Ping(); errs!=nil{
-	//	panic("orm failed to initialized")
-	//	//return nil,errors.New("orm failed to initialized")
-	//}
+	if errs := engine.Ping(); errs!=nil{
+		panic(errs.Error())
+		//return nil,errors.New("orm failed to initialized")
+	}
 	if d.Prefix == ""{
 		engine.SetTableMapper(core.SnakeMapper{})
 	}else{
@@ -75,4 +115,18 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 	engine.SetMaxOpenConns(20)
 
 	return engine
+}
+
+func (m * MgoConfig)MongoDb() *MongoDb {
+	if m.MgoIP != ""{
+		session, err := mgo.Dial(fmt.Sprintf("%s:%d", m.MgoIP, m.MgoPort))
+		if err != nil {
+			panic(err.Error())
+		}
+		session.SetPoolLimit(m.PoolLimit)
+		database := session.DB(m.MgoDB)
+		collection := database.C(m.Collection)
+		return &MongoDb{session,database,collection}
+	}
+	return &MongoDb{nil,nil,nil}
 }

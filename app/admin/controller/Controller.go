@@ -5,6 +5,7 @@ import (
 	"github.com/kataras/iris"
 	"fmt"
 	"github.com/alezh/novel/modules"
+	"github.com/alezh/novel/modules/user"
 )
 
 type AdminController struct {
@@ -21,9 +22,12 @@ func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 	b.Dependencies().Add(func(ctx iris.Context) formValue { return ctx.FormValue })
 }
 
-// GetIndex handles GET:/Admin/Index
+// GetIndex handles GET:/Admin/index
 func (c *AdminController)GetIndex() {
-	fmt.Println(12221)
+	use := new(user.User)
+	c.Source.Mysql.Get(use)
+	fmt.Println(use)
+	c.Ctx.Text(use.User)
 }
 
 // GetBy handles GET:/user/{id:long},
