@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/alezh/novel/app"
+	_"github.com/alezh/novel/lib"
 	"github.com/kataras/iris"
 )
 

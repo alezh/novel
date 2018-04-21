@@ -112,7 +112,7 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 	//设置连接池的空闲数大小
 	engine.SetMaxIdleConns(5)
 	//设置最大打开连接数
-	engine.SetMaxOpenConns(20)
+	engine.SetMaxOpenConns(2048)
 
 	return engine
 }

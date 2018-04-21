@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/alezh/novel/modules"
 	"github.com/alezh/novel/modules/user"
+	"github.com/alezh/novel/modules/spider"
 )
 
 type AdminController struct {
@@ -36,5 +37,7 @@ func (c *AdminController)GetBy(userID int64){
 }
 
 func (c *AdminController)Get()  {
-	fmt.Println(4454545)
+	var sp = &spider.Spider{}
+	all := sp.GetAll()
+	fmt.Println(len(all))
 }

@@ -1,5 +1,6 @@
 package config
 
+//mysql
 const (
 	MYSQL_IP    string = "127.0.0.1"
 	MYSQL_DB    string = "novel"
@@ -11,6 +12,7 @@ const (
 	SHOWSQL     bool   = false
 )
 
+//mongodb
 const (
 	MGO_URL     string = ""
 	MGO_DB      string = ""
