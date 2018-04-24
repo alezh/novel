@@ -22,3 +22,15 @@ const (
 	COLLECTION  string = ""
 	MGO_POOL    int    = 200
 )
+
+// 运行状态
+const (
+	STOPPED = iota - 1
+	STOP
+	RUN
+	PAUSE
+)
+
+const (
+	STOP_TXT  = "-蜘蛛服务停止-"
+)

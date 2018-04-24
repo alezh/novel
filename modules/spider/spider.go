@@ -1,6 +1,10 @@
 package spider
 
-import "github.com/alezh/novel/modules/rule"
+import (
+	"github.com/alezh/novel/modules/rule"
+	"sync"
+	"github.com/alezh/novel/config"
+)
 
 //规则添加 获取规则相关数据
 
@@ -16,12 +20,31 @@ type Spider struct {
 	SubNamespace    func(self *Spider, dataCell map[string]interface{}) string // 次级命名，用于输出文件、路径的命名，可依赖具体数据内容
 	RuleTree        *rule.RuleTree                                             // 定义具体的采集规则树
 
+
+	status    int               // 执行状态
+	lock      sync.RWMutex
+	once      sync.Once
 }
 
-func (s *Spider)Register()  *Spider{
-	return SpeciesCollection.Load(s)
+func (sp *Spider)Register()  *Spider{
+	return SpeciesCollection.Load(sp)
 }
 
-func (s *Spider)GetAll() []*Spider {
+func (sp *Spider)GetAll() []*Spider {
 	return SpeciesCollection.Get()
+}
+
+/**********************************************************************************************************************/
+
+
+func (sp *Spider) IsStopping() bool {
+	sp.lock.RLock()
+	defer sp.lock.RUnlock()
+	return sp.status == config.STOP
+}
+// 若已主动终止任务，则崩溃爬虫协程
+func (sp *Spider) tryPanic() {
+	if sp.IsStopping() {
+		panic(config.STOP_TXT)
+	}
 }
