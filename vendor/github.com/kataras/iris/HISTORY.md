@@ -17,6 +17,19 @@ Developers are not forced to upgrade if they don't really need it. Upgrade whene
 
 **How to upgrade**: Open your command-line and execute this command: `go get -u github.com/kataras/iris` or let the automatic updater do that for you.
 
+# We, 25 April 2018 | v10.6.1
+
+- Re-implement the [BoltDB](https://github.com/coreos/bbolt) as built'n back-end storage for sessions(`sessiondb`) using the latest features: [/sessions/sessiondb/boltdb/database.go](sessions/sessiondb/boltdb/database.go), example can be found at [/_examples/sessions/database/boltdb/main.go](_examples/sessions/database/boltdb/main.go).
+- Fix a minor issue on [Badger sessiondb example](_examples/sessions/database/badger/main.go). Its `sessions.Config { Expires }` field was `2 *time.Second`, it's `45 *time.Minute` now.
+- Other minor improvements to the badger sessiondb.
+
+# Su, 22 April 2018 | v10.6.0
+
+- Fix open redirect by @wozz via PR: https://github.com/kataras/iris/pull/972.
+- Fix when destroy session can't remove cookie in subdomain by @Chengyumeng via PR: https://github.com/kataras/iris/pull/964.
+- Add `OnDestroy(sid string)` on sessions for registering a listener when a session is destroyed with commit: https://github.com/kataras/iris/commit/d17d7fecbe4937476d00af7fda1c138c1ac6f34d.
+- Finally, sessions are in full-sync with the registered database now. That required a lot of internal code changed but **zero code change requirements by your side**. We kept only `badger` and `redis` as the back-end built'n supported sessions storages, they are enough. Made with commit: https://github.com/kataras/iris/commit/f2c3a5f0cef62099fd4d77c5ccb14f654ddbfb5c relative to many issues that you've requested it.
+
 # Sa, 24 March 2018 | v10.5.0
 
 ### New

@@ -337,6 +337,7 @@ You can serve [quicktemplate](https://github.com/valyala/quicktemplate) and [her
 - [Write Gzip](http_responsewriter/write-gzip/main.go)
 - [Stream Writer](http_responsewriter/stream-writer/main.go)
 - [Transactions](http_responsewriter/transactions/main.go)
+- [SSE (third-party package usage for server-side events)](http_responsewriter/sse-third-party/main.go)
 
 > The `context/context#ResponseWriter()` returns an enchament version of a http.ResponseWriter, these examples show some places where the Context uses this object. Besides that you can use it as you did before iris.
 
@@ -399,10 +400,8 @@ iris session manager lives on its own [package](https://github.com/kataras/iris/
 - [Secure Cookie](sessions/securecookie/main.go)
 - [Flash Messages](sessions/flash-messages/main.go)
 - [Databases](sessions/database)
-    * [File](sessions/database/file/main.go)
-    * [BoltDB](sessions/database/boltdb/main.go)
     * [Badger](sessions/database/badger/main.go)
-    * [LevelDB](sessions/database/leveldb/main.go)
+    * [BoltDB](sessions/database/boltdb/main.go)
     * [Redis](sessions/database/redis/main.go)
 
 > You're free to use your own favourite sessions package if you'd like so.
