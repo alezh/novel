@@ -32,5 +32,6 @@ const (
 )
 
 const (
-	STOP_TXT  = "-蜘蛛服务停止-"
+	STOP_TXT   string = "-蜘蛛服务停止-"
+	PROXY_START   int = 0
 )
