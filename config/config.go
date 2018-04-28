@@ -23,3 +23,10 @@ const (
 	MGO_POOL    int    = 200
 )
 
+// 运行状态
+const (
+	STOPPED = iota - 1
+	STOP
+	RUN
+	PAUSE
+)
