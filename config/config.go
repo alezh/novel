@@ -22,3 +22,4 @@ const (
 	COLLECTION  string = ""
 	MGO_POOL    int    = 200
 )
+

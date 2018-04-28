@@ -1,6 +1,6 @@
 package spider
 
-import "github.com/alezh/novel/modules/rule"
+import "github.com/alezh/novel/system"
 
 //规则添加 获取规则相关数据
 
@@ -14,7 +14,7 @@ type Spider struct {
 	//NotDefaultField bool                                                       // 是否禁止输出结果中的默认字段 Url/ParentUrl/DownloadTime
 	Namespace       func(self *Spider) string                                  // 命名空间，用于输出文件、路径的命名
 	SubNamespace    func(self *Spider, dataCell map[string]interface{}) string // 次级命名，用于输出文件、路径的命名，可依赖具体数据内容
-	RuleTree        *rule.RuleTree                                             // 定义具体的采集规则树
+	RuleTree        system.RuleTree                                             // 定义具体的采集规则树
 
 }
 

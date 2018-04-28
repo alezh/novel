@@ -3,10 +3,8 @@ package controller
 import (
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris"
-	"fmt"
 	"github.com/alezh/novel/modules"
 	"github.com/alezh/novel/modules/user"
-	"github.com/alezh/novel/modules/spider"
 )
 
 type AdminController struct {
@@ -27,7 +25,6 @@ func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 func (c *AdminController)GetIndex() {
 	use := new(user.User)
 	c.Source.Mysql.Get(use)
-	fmt.Println(use)
 	c.Ctx.Text(use.User)
 }
 
@@ -37,7 +34,4 @@ func (c *AdminController)GetBy(userID int64){
 }
 
 func (c *AdminController)Get()  {
-	var sp = &spider.Spider{}
-	all := sp.GetAll()
-	fmt.Println(len(all))
 }

@@ -1,6 +1,6 @@
 package lib
 
-import "github.com/alezh/novel/modules/spider"
+import "github.com/alezh/novel/system/spider"
 
 func init()  {
 	xiao.Register()
