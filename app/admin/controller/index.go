@@ -5,11 +5,13 @@ import (
 	"github.com/kataras/iris"
 	"github.com/alezh/novel/modules"
 	"github.com/alezh/novel/modules/user"
+	"github.com/alezh/novel/config"
+	"github.com/alezh/novel/system"
 )
 
 type AdminController struct {
-	//mvc.BaseController
-	modules.BaseController
+	modules.AuthController
+
 }
 
 type formValue func(string) string
@@ -23,6 +25,10 @@ func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 
 // GetIndex handles GET:/Admin/index
 func (c *AdminController)GetIndex() {
+	id, err := c.Session.GetInt64(config.SessionIDKey)
+	if err != nil || id <= 0{
+
+	}
 	use := new(user.User)
 	c.Source.Mysql.Get(use)
 	c.Ctx.Text(use.User)
@@ -34,4 +40,19 @@ func (c *AdminController)GetBy(userID int64){
 }
 
 func (c *AdminController)Get()  {
+	
+}
+
+func (c *AdminController)Post()  {
+	c.Ctx.Text("^……^")
+}
+
+func (c *AdminController)PostLogin(form formValue) {
+
+}
+
+// 服务器开启 POST :/Admin/engine/start
+func (c *AdminController)PostEngineStart()  {
+	system.SystemInfo.SetConfig("Mode", config.OFFLINE)
+	system.SystemInfo.Start()
 }

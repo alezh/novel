@@ -47,12 +47,12 @@ type (
 	DataSource struct {
 		Mysql   *xorm.Engine
 		MongoDb *MongoDb
-
 	}
 )
 
+
 func init()  {
-	Source =  &DataSource{
+	Source = &DataSource{
 		NewMysqlSource().Mysql(),
 		NewMongoDBSource().MongoDb(),
 	}

@@ -4,19 +4,25 @@ import (
 	"github.com/henrylee2cn/teleport"
 	"time"
 	"sync"
-	_ "github.com/alezh/novel/lib"
 	"github.com/alezh/novel/system/spider"
 	"github.com/alezh/novel/config"
 	"io"
+	"github.com/alezh/novel/system/mission"
+	"reflect"
+	"strings"
+	"math"
 )
 
 type (
 	Enging interface {
-
+		Start()
+		SetConfig(string,interface{})Enging
+		GetConfig(...string)interface{}
 	}
 	System struct {
 		*config.SysConfig                   // 全局配置
 		*spider.Species                     // 全部蜘蛛种类
+		*mission.TaskJar                 // 服务器与客户端间传递任务的存储库
 		teleport.Teleport                   // socket长连接双工通信接口，json数据传输
 		sum                   [2]uint64     // 执行计数
 		takeTime              time.Duration // 执行计时
@@ -31,7 +37,6 @@ type (
 var SystemInfo  = SysInterface()
 
 func SysInterface() Enging {
-
 	return initSystem()
 }
 
@@ -41,10 +46,15 @@ func initSystem() *System {
 		Species:     spider.SpeciesCollection,
 		status:      config.STOPPED,
 		Teleport:    teleport.New(),
+		TaskJar:     mission.NewTaskJar(),
 
 	}
 	return sys
 }
+//
+//func WebStart()  {
+//	app.NewApp().Run(iris.Addr(":8080"),app.Configure)
+//}
 
 func (sys *System)Init(mode int, port int, master string, w ...io.Writer)  {
 	sys.canSocketLog = false
@@ -54,7 +64,7 @@ func (sys *System)Init(mode int, port int, master string, w ...io.Writer)  {
 	//sys.LogGoOn()
 	sys.SysConfig.Mode, sys.SysConfig.Port, sys.SysConfig.Master = mode, port, master
 	sys.Teleport = teleport.New()
-
+	sys.TaskJar = mission.NewTaskJar()
 }
 
 func (sys *System)ReInit()  {
@@ -69,12 +79,39 @@ func (sys *System)Stop()  {
 
 }
 
-func (sys *System)GetConfig()  {
-	
+func (sys *System)GetConfig(k ...string) interface{}  {
+	defer func() {
+		if err := recover(); err != nil {
+			//logs.Log.Error("%v", err)
+		}
+	}()
+	if len(k) == 0 {
+		return sys.SysConfig
+	}
+	key := strings.Title(k[0])
+	acv := reflect.ValueOf(sys.SysConfig).Elem()
+	return acv.FieldByName(key).Interface()
 }
 
-func (sys *System)SetConfig()  {
-	
+// 设置全局参数
+func (sys *System)SetConfig(k string, v interface{}) Enging {
+	defer func() {
+		if err := recover(); err != nil {
+			//logs.Log.Error("%v", err)
+		}
+	}()
+	if k == "Limit" && v.(int64) <= 0 {
+		v = int64(math.MaxInt64) //spider.LIMIT
+	} else if k == "DockerCap" && v.(int) < 1 {
+		v = int(1)
+	}
+	//反射
+	acv := reflect.ValueOf(sys.SysConfig).Elem()
+	key := strings.Title(k)
+	if acv.FieldByName(key).CanSet() {
+		acv.FieldByName(key).Set(reflect.ValueOf(v))
+	}
+	return sys
 }
 
 func (sys *System)LogGoOn()  {

@@ -13,6 +13,7 @@ type SysConfig struct {
 	ThreadNum      int    // 全局最大并发量
 	Pausetime      int64  // 暂停时长参考/ms(随机: Pausetime/2 ~ Pausetime*2)
 	OutType        string // 输出方式
+	DbStype        string // 数据库类型   mgo mysql
 	DockerCap      int    // 分段转储容器容量
 	Limit          int64  // 采集上限，0为不限，若在规则中设置初始值为LIMIT则为自定义限制，否则默认限制请求数
 	ProxyMinute    int64  // 代理IP更换的间隔分钟数

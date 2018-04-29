@@ -8,12 +8,14 @@ import (
 var ConfigureMVC = make([]func(*mvc.Application),0)
 
 func init() {
-	AddRoute(AdminRoutes)
+	AddRoute(AdminRoutes,IndexRoutes)
 }
 
 
-func AddRoute(f func(*mvc.Application)){
-	ConfigureMVC = append(ConfigureMVC,f)
+func AddRoute(f... func(*mvc.Application)){
+	if len(f)>0{
+		ConfigureMVC = append(ConfigureMVC,f...)
+	}
 }
 
 func MvcBind()  {

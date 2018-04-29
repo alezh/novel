@@ -2,7 +2,8 @@ package app
 
 import (
 	"github.com/kataras/iris/mvc"
-	"github.com/alezh/novel/app/admin/controller"
+	adminController "github.com/alezh/novel/app/admin/controller"
+	indexController "github.com/alezh/novel/app/index/controller"
 	"github.com/alezh/novel/storage"
 )
 
@@ -16,7 +17,7 @@ func AdminRoutes(m *mvc.Application)  {
 		storage.Source,
 		webApp.Sessions.Start,
 	)
-	admin.Handle(new(controller.AdminController))
+	admin.Handle(new(adminController.AdminController))
 }
 
 //func Routes(b *bootstrap.Bootstrapper) {
@@ -25,3 +26,12 @@ func AdminRoutes(m *mvc.Application)  {
 //	b.Get("/following/{id:long}", GetFollowingHandler)
 //	b.Get("/like/{id:long}", GetLikeHandler)
 //}
+
+func IndexRoutes(m *mvc.Application)  {
+	index := m.Party("/Index")
+	index.Register(
+		storage.Source,
+		webApp.Sessions.Start,
+	)
+	index.Handle(new(indexController.IndexController))
+}

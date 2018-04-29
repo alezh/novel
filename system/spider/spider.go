@@ -1,6 +1,9 @@
 package spider
 
-import "github.com/alezh/novel/system"
+import (
+	"sync"
+	"github.com/alezh/novel/system/mission"
+)
 
 //规则添加 获取规则相关数据
 
@@ -14,7 +17,16 @@ type Spider struct {
 	//NotDefaultField bool                                                       // 是否禁止输出结果中的默认字段 Url/ParentUrl/DownloadTime
 	Namespace       func(self *Spider) string                                  // 命名空间，用于输出文件、路径的命名
 	SubNamespace    func(self *Spider, dataCell map[string]interface{}) string // 次级命名，用于输出文件、路径的命名，可依赖具体数据内容
-	RuleTree        system.RuleTree                                             // 定义具体的采集规则树
+	RuleTree        RuleTree                                             // 定义具体的采集规则树
+
+	// 以下字段系统自动赋值
+	id        int               // 自动分配的SpiderQueue中的索引
+	subName   string            // 由Keyin转换为的二级标识名
+	reqMatrix *mission.Matrix   // 请求矩阵
+	//timer     *Timer          // 定时器
+	status    int               // 执行状态
+	lock      sync.RWMutex
+	once      sync.Once
 
 }
 
