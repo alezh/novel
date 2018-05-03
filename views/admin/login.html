@@ -14,7 +14,7 @@
 			<div class="m-login">
 				<h3>后台系统登录</h3>
 				<div class="m-login-warp">
-					<form class="layui-form">
+					<form class="layui-form" action="/Admin/login" method="POST">
 						<div class="layui-form-item">
 							<input type="text" name="title" required lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
 						</div>
@@ -39,15 +39,15 @@
 						</div>
 					</form>
 				</div>
-				<p class="copyright">Copyright 2015-2016 by XIAODU</p>
+				<p class="copyright">Copyright 2018-2023 by alezh</p>
 			</div>
 		</div>
 		<script src="/public/layui/layui.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-			layui.use(['form', 'layedit', 'laydate'], function() {
-				var form = layui.form(),
-					layer = layui.layer;
-
+			layui.use(['layer', 'form'], function() {
+                var layer = layui.layer,
+                        $ = layui.jquery,
+                        form = layui.form;
 
 				//自定义验证规则
 				form.verify({
@@ -58,17 +58,16 @@
 					},
 					password: [/(.+){6,12}$/, '密码必须6到12位'],
 					verity: [/(.+){6}$/, '验证码必须是6位'],
-					
 				});
 
 				
-				//监听提交
-				form.on('submit(login)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					})
-					return false;
-				});
+				// //监听提交
+				// form.on('submit(login)', function(data) {
+				// 	layer.alert(JSON.stringify(data.field), {
+				// 		title: '最终的提交信息'
+				// 	})
+				// 	return false;
+				// });
 
 			});
 		</script>

@@ -27,10 +27,6 @@ func (c *IndexController)Get() mvc.Result {
 		Name:"index.html",
 		Data:iris.Map{"config":dbStype},
 	}
-	//
-	//if dbStype == "" {
-	//	return install
-	//}
 }
 
 //初始化环境安装系统
