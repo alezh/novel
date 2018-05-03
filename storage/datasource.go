@@ -94,11 +94,13 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 	engine, err := xorm.NewEngine("mysql", dataSourceName)
 
 	if err!=nil{
-		panic("orm failed to initialized")
+		return nil
+		//panic("orm failed to initialized")
 		//return nil,errors.New("orm failed to initialized")
 	}
 	if errs := engine.Ping(); errs!=nil{
-		panic(errs.Error())
+		return nil
+		//panic(errs.Error())
 		//return nil,errors.New("orm failed to initialized")
 	}
 	if d.Prefix == ""{
@@ -121,7 +123,8 @@ func (m * MgoConfig)MongoDb() *MongoDb {
 	if m.MgoIP != ""{
 		session, err := mgo.Dial(fmt.Sprintf("%s:%d", m.MgoIP, m.MgoPort))
 		if err != nil {
-			panic(err.Error())
+			return nil
+			//panic(err.Error())
 		}
 		session.SetPoolLimit(m.PoolLimit)
 		database := session.DB(m.MgoDB)

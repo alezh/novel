@@ -23,9 +23,10 @@ func (c *IndexController)Get() mvc.Result {
 
 	dbStype := system.SystemInfo.GetConfig("DbStype").(string)
 
-	//return mvc.View{
-	//	Name:"index.html",
-	//}
+	return mvc.View{
+		Name:"index.html",
+		Data:iris.Map{"config":dbStype},
+	}
 	//
 	//if dbStype == "" {
 	//	return install

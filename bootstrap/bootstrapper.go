@@ -88,7 +88,8 @@ func (b *Bootstrapper) SetupErrorHandlers() {
 
 const (
 	// StaticAssets is the root directory for public assets like images, css, js.
-	StaticAssets = "../github.com/alezh/novel/public/"
+	//StaticAssets = "../github.com/alezh/novel/public/"
+	StaticAssets = "./public"
 	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
 	Favicon = "favicon.ico"
 )

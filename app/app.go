@@ -22,7 +22,7 @@ func NewApp() *bootstrap.Bootstrapper{
 	)
 	webApp.SetupErrorHandlers()
 	//app.Favicon(bootstrap.StaticAssets + bootstrap.Favicon)
-	webApp.StaticWeb("/public", bootstrap.StaticAssets)
+	webApp.StaticWeb("/public", "./public")
 	webApp.Use(recover.New())
 	webApp.Use(logger.New())
 	MvcBind()

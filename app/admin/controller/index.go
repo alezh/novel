@@ -39,8 +39,11 @@ func (c *AdminController)GetBy(userID int64){
 
 }
 
-func (c *AdminController)Get()  {
-	
+func (c *AdminController)GetLogin()  mvc.Result{
+	return mvc.View{
+		Name:"admin/login.html",
+		Data:iris.Map{"config":"1"},
+	}
 }
 
 func (c *AdminController)Post()  {
