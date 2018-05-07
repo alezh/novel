@@ -14,12 +14,12 @@ const (
 
 //mongodb
 const (
-	MGO_URL     string = ""
-	MGO_DB      string = ""
+	MGO_URL     string = "127.0.0.1"
+	MGO_DB      string = "BookDb"
 	MGO_USER    string = ""
 	MGO_PASS    string = ""
 	MGO_PORT    int    = 27017
-	COLLECTION  string = ""
+	COLLECTION  string = "BookCover"
 	MGO_POOL    int    = 200
 )
 
