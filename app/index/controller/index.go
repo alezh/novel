@@ -23,13 +23,22 @@ func (c *IndexController)Get() mvc.Result {
 
 	dbStype := system.SystemInfo.GetConfig("DbStype").(string)
 
+	if dbStype == ""{
+		return mvc.Response{
+			Path: "/Index/install",
+		}
+	}
+
+
 	return mvc.View{
-		Name:"index.html",
+		Name:"index/index.html",
 		Data:iris.Map{"config":dbStype},
 	}
 }
 
 //初始化环境安装系统
-func (c *IndexController)GetInstall()  {
-	
+func (c *IndexController)GetInstall() mvc.Result {
+	return mvc.View{
+		Name:"install/index.html",
+	}
 }

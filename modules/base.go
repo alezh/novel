@@ -15,13 +15,21 @@ type BaseController struct {
 	DbType string
 }
 
+var dbType = system.SystemInfo.GetConfig("DbStype").(string)
+
+//请求前处理
 func (c *BaseController) BeginRequest(ctx iris.Context) {
-	if c.Source.Mysql != nil {
-		system.SystemInfo.SetConfig("DbStype", "mysql")
-	}else if c.Source.MongoDb != nil{
-		system.SystemInfo.SetConfig("DbStype", "mgo")
+	if dbType == ""{
+		if c.Source.Mysql != nil {
+			system.SystemInfo.SetConfig("DbStype", "mysql")
+			dbType = "mysql"
+		}else if c.Source.MongoDb != nil{
+			system.SystemInfo.SetConfig("DbStype", "mgo")
+			dbType = "mysql"
+		}
 	}
 }
 
+//请求后处理
 func (c *BaseController) EndRequest(ctx iris.Context) {
 }

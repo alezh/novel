@@ -127,11 +127,11 @@ func newClock(id string, tol time.Duration, bell *Bell) (*Clock, bool) {
 func (self *Clock) sleep() {
 	d := self.duration()
 	self.timer.Reset(d)
-	t0 := time.Now()
-	logs.Log.Critical("************************ ……定时器 <%s> 睡眠 %v ，计划 %v 醒来 ……************************", self.id, d, t0.Add(d).Format("2006-01-02 15:04:05"))
+	//t0 := time.Now()
+	//logs.Log.Critical("************************ ……定时器 <%s> 睡眠 %v ，计划 %v 醒来 ……************************", self.id, d, t0.Add(d).Format("2006-01-02 15:04:05"))
 	<-self.timer.C
-	t1 := time.Now()
-	logs.Log.Critical("************************ ……定时器 <%s> 在 %v 醒来，实际睡眠 %v ……************************", self.id, t1.Format("2006-01-02 15:04:05"), t1.Sub(t0))
+	//t1 := time.Now()
+	//logs.Log.Critical("************************ ……定时器 <%s> 在 %v 醒来，实际睡眠 %v ……************************", self.id, t1.Format("2006-01-02 15:04:05"), t1.Sub(t0))
 }
 
 func (self *Clock) wake() {

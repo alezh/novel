@@ -55,6 +55,7 @@ func (self *Failure) flush(provider string) (fLen int, err error){
 	self.RWMutex.Lock()
 	defer self.RWMutex.Unlock()
 	fLen = len(self.list)
+	//TODO::写入库操作
 	switch provider{
 	case "mgo":
 		storage.Source.MongoDb.Database.C("novel").Count()
@@ -62,4 +63,5 @@ func (self *Failure) flush(provider string) (fLen int, err error){
 		//同步表
 		storage.Source.Mysql.Sync2(&FailureModel{})
 	}
+	return fLen ,nil
 }
