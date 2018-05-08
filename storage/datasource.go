@@ -112,7 +112,7 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 	//日志打印SQL
 	engine.ShowSQL(d.ShowSQL)
 	//设置连接池的空闲数大小
-	engine.SetMaxIdleConns(5)
+	engine.SetMaxIdleConns(1024)
 	//设置最大打开连接数
 	engine.SetMaxOpenConns(2048)
 

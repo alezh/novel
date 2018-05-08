@@ -12,6 +12,11 @@ const (
 	SHOWSQL     bool   = false
 )
 
+//配置文件
+const (
+	CONFIG      string = "config.ini"       // 配置文件路径
+)
+
 //mongodb
 const (
 	MGO_URL     string = "127.0.0.1"
@@ -20,7 +25,7 @@ const (
 	MGO_PASS    string = ""
 	MGO_PORT    int    = 27017
 	COLLECTION  string = "BookCover"
-	MGO_POOL    int    = 200
+	MGO_POOL    int    = 2048
 )
 
 // 运行状态
