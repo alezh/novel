@@ -7,6 +7,10 @@ import (
 	"fmt"
 )
 
+var (
+	CRAWLS_CAP int = setting.DefaultInt("crawlcap", 50)
+)
+
 const (
 	mode        int    = UNSET        // 节点角色
 	port        int    = 2015         // 主节点端口
@@ -42,8 +46,6 @@ func set() config.Configer {
 
 func defaultConfig(iniconf config.Configer) {
 
-	iniconf.Set("DbStype", "mgo")
-
 	iniconf.Set("mgo::host", MGO_URL)
 	iniconf.Set("mgo::dbName", MGO_DB)
 	iniconf.Set("mgo::username", MGO_USER)
@@ -69,7 +71,7 @@ func defaultConfig(iniconf config.Configer) {
 	iniconf.Set("run::master", master)
 	iniconf.Set("run::thread", strconv.Itoa(thread))
 	iniconf.Set("run::pause", strconv.FormatInt(pause, 10))
-	//iniconf.Set("run::outtype", outtype)
+	iniconf.Set("run::outtype", "mgo")
 	iniconf.Set("run::dockercap", strconv.Itoa(dockercap))
 	iniconf.Set("run::limit", strconv.FormatInt(limit, 10))
 	iniconf.Set("run::proxyminute", strconv.FormatInt(proxyminute, 10))
@@ -78,10 +80,6 @@ func defaultConfig(iniconf config.Configer) {
 }
 
 func trySet(iniconf config.Configer) {
-
-	if v := iniconf.String("DbStype"); v == "" {
-		iniconf.Set("DbStype", "mgo")
-	}
 
 	if v := iniconf.String("mgo::host"); v == "" {
 		iniconf.Set("mgo::host", MGO_URL)
@@ -157,9 +155,9 @@ func trySet(iniconf config.Configer) {
 		iniconf.Set("run::pause", strconv.FormatInt(pause, 10))
 	}
 
-	//if v := iniconf.String("run::outtype"); v == "" {
-	//	iniconf.Set("run::outtype", outtype)
-	//}
+	if v := iniconf.String("run::outtype"); v == "" {
+		iniconf.Set("run::outtype", "mgo")
+	}
 
 	if v, e := iniconf.Int("run::dockercap"); v <= 0 || e != nil {
 		iniconf.Set("run::dockercap", strconv.Itoa(dockercap))

@@ -21,7 +21,7 @@ func (c *IndexController) BeforeActivation(b mvc.BeforeActivation) {
 
 func (c *IndexController)Get() mvc.Result {
 
-	dbStype := system.SystemInfo.GetConfig("DbStype").(string)
+	dbStype := system.SystemInfo.GetConfig("OutType").(string)
 
 	if dbStype == ""{
 		return mvc.Response{

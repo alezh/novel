@@ -26,6 +26,7 @@ type (
 		*mission.TaskJar                    // 服务器与客户端间传递任务的存储库
 		reptilian.SpiderQueue               // 当前任务的蜘蛛队列
 		teleport.Teleport                   // socket长连接双工通信接口，json数据传输
+		reptilian.ReptilianPool             // 爬行回收池
 		sum                   [2]uint64     // 执行计数
 		takeTime              time.Duration // 执行计时
 		status                int           // 运行状态
@@ -50,7 +51,7 @@ func initSystem() *System {
 		SpiderQueue: reptilian.NewPool(),
 		Teleport:    teleport.New(),
 		TaskJar:     mission.NewTaskJar(),
-
+		ReptilianPool:reptilian.NewPool(),
 	}
 	return sys
 }
