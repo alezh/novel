@@ -14,7 +14,7 @@ const (
 
 //配置文件
 const (
-	CONFIG      string = "config.ini"       // 配置文件路径
+	CONFIG      string = "./config.ini"       // 配置文件路径
 )
 
 //mongodb
