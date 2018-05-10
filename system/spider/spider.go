@@ -251,6 +251,16 @@ func (self *Spider) Copy() *Spider {
 	return ghost
 }
 
+func (self *Spider) ReqmatrixInit() *Spider {
+	if self.Limit < 0 {
+		self.reqMatrix = mission.AddMatrix(self.GetName(), self.GetSubName(), self.Limit)
+		self.SetLimit(0)
+	} else {
+		self.reqMatrix = mission.AddMatrix(self.GetName(), self.GetSubName(), math.MinInt64)
+	}
+	return self
+}
+
 func (self *Spider) IsStopping() bool {
 	self.lock.RLock()
 	defer self.lock.RUnlock()

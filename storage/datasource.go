@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"github.com/alezh/novel/config"
 	"gopkg.in/mgo.v2"
-	"fmt"
+	"github.com/JodeZer/mgop"
 )
 
 var Source *DataSource
@@ -98,7 +98,7 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 		//panic("orm failed to initialized")
 		//return nil,errors.New("orm failed to initialized")
 	}
-	if errs := engine.Ping(); errs!=nil{
+	if errs := engine.Ping(); errs != nil{
 		return nil
 		//panic(errs.Error())
 		//return nil,errors.New("orm failed to initialized")
@@ -121,14 +121,15 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 
 func (m * MgoConfig)MongoDb() *MongoDb {
 	if m.MgoIP != ""{
-		session, err := mgo.Dial(fmt.Sprintf("%s:%d", m.MgoIP, m.MgoPort))
+		//session, err := mgo.Dial(fmt.Sprintf("%s:%d", m.MgoIP, m.MgoPort))
+		p, err := mgop.DialStrongPool(connection, 5)
 		if err != nil {
 			return nil
 			//panic(err.Error())
 		}
-		session.SetPoolLimit(m.PoolLimit)
-		database := session.DB(m.MgoDB)
-		collection := database.C(m.Collection)
+		session := p.AcquireSession()
+		//database := session.DB(m.MgoDB)
+		//collection := database.C(m.Collection)
 		return &MongoDb{session,database,collection}
 	}
 	return &MongoDb{nil,nil,nil}
