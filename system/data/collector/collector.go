@@ -6,7 +6,6 @@ import (
 	."github.com/alezh/novel/system/data"
 	"fmt"
 	"github.com/alezh/novel/config"
-	"sync/atomic"
 	"time"
 	"github.com/alezh/novel/storage"
 )
