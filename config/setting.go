@@ -46,13 +46,11 @@ func set() config.Configer {
 
 func defaultConfig(iniconf config.Configer) {
 
-	iniconf.Set("mgo::host", MGO_URL)
-	iniconf.Set("mgo::dbName", MGO_DB)
-	iniconf.Set("mgo::username", MGO_USER)
-	iniconf.Set("mgo::password", MGO_PASS)
-	iniconf.Set("mgo::port", strconv.Itoa(MGO_PORT))
-	iniconf.Set("mgo::collection", COLLECTION)
-	iniconf.Set("mgo::SetPoolLimit", "2048")
+	iniconf.Set("mgo Master::connection", MGO_CONN)
+	iniconf.Set("mgo Master::dbName", MGO_DB)
+	iniconf.Set("mgo Master::SetPoolLimit", "2048")
+	iniconf.Set("mgo Master::minPoolSize", "0")
+	iniconf.Set("mgo Master::maxIdleTimeMS", "2000")
 
 	iniconf.Set("mysql::host", MYSQL_IP)
 	iniconf.Set("mysql::dbname", MYSQL_DB)
@@ -81,27 +79,22 @@ func defaultConfig(iniconf config.Configer) {
 
 func trySet(iniconf config.Configer) {
 
-	if v := iniconf.String("mgo::host"); v == "" {
-		iniconf.Set("mgo::host", MGO_URL)
+	if v := iniconf.String("mgoMaster::connection"); v == "" {
+		iniconf.Set("mgoMaster::connection", MGO_CONN)
 	}
-	if v := iniconf.String("mgo::dbName"); v == "" {
-		iniconf.Set("mgo::dbName", MGO_DB)
+	if v := iniconf.String("mgoMaster::dbName"); v == "" {
+		iniconf.Set("mgoMaster::dbName", MGO_DB)
 	}
-	if v := iniconf.String("mgo::username"); v == "" {
-		iniconf.Set("mgo::username", MGO_USER)
+	if v , e := iniconf.Int("mgoMaster::SetPoolLimit"); v <= 0 || e!=nil {
+		iniconf.Set("mgoMaster::SetPoolLimit", "2048")
 	}
-	if v := iniconf.String("mgo::password"); v == "" {
-		iniconf.Set("mgo::password", MGO_PASS)
+	if v , e := iniconf.Int("mgoMaster::minPoolSize"); v <= 0 || e!=nil {
+		iniconf.Set("mgoMaster::minPoolSize", "0")
 	}
-	if v := iniconf.String("mgo::port"); v == "" {
-		iniconf.Set("mgo::port", strconv.Itoa(MGO_PORT))
+	if v , e := iniconf.Int("mgoMaster::maxIdleTimeMS"); v <= 0 || e!=nil {
+		iniconf.Set("mgoMaster::maxIdleTimeMS", "2000")
 	}
-	if v := iniconf.String("mgo::collection"); v == "" {
-		iniconf.Set("mgo::collection", COLLECTION)
-	}
-	if v , e := iniconf.Int("mgo::SetPoolLimit"); v <= 0 || e!=nil {
-		iniconf.Set("mgo::SetPoolLimit", "2048")
-	}
+
 
 	if v := iniconf.String("mysql::host"); v == "" {
 		iniconf.Set("mysql::host", MYSQL_IP)

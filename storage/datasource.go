@@ -121,7 +121,8 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 
 func (m * MgoConfig)MongoDb() *MongoDb {
 	if m.MgoIP != ""{
-		fmt.Printf("mongodb://%s:%d", m.MgoIP, m.MgoPort)
+		//fmt.Printf("mongodb://%d:$d@%s:%d/%d?minPoolSize=%s&maxIdleTimeMS=%s", m.MgoIP, m.MgoPort)
+		//fmt.Printf("mongodb://%d:$d@%s:%d,%s:%d/%d?minPoolSize=%s&maxIdleTimeMS=%s", m.MgoIP, m.MgoPort)
 		//connection := "mongodb://myuser:mypass@localhost:40001,otherhost:40001/mydb?minPoolSize=0&maxIdleTimeMS=3000"
 		session, err := mgo.Dial(fmt.Sprintf("%s:%d", m.MgoIP, m.MgoPort))
 		//p, err := mgop.DialStrongPool(connection, 5)
@@ -129,6 +130,7 @@ func (m * MgoConfig)MongoDb() *MongoDb {
 			return nil
 			//panic(err.Error())
 		}
+		session.SetPoolLimit(5000)
 		//session := p.AcquireSession()
 		database := session.DB(m.MgoDB)
 		collection := database.C(m.Collection)

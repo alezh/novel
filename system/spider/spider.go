@@ -45,6 +45,33 @@ func (s *Spider)Register()  *Spider{
 	return SpeciesCollection.Load(s)
 }
 
+// 开始执行蜘蛛
+func (self *Spider) Start() {
+	defer func() {
+		if p := recover(); p != nil {
+			//logs.Log.Error(" *     Panic  [root]: %v\n", p)
+		}
+		self.lock.Lock()
+		self.status = config.RUN
+		self.lock.Unlock()
+	}()
+	self.RuleTree.Root(GetContext(self, nil))
+}
+// 主动崩溃爬虫运行协程
+func (self *Spider) Stop() {
+	self.lock.Lock()
+	defer self.lock.Unlock()
+	if self.status == config.STOP {
+		return
+	}
+	self.status = config.STOP
+	// 取消所有定时器
+	if self.timer != nil {
+		self.timer.drop()
+		self.timer = nil
+	}
+}
+
 // 指定规则的获取结果的字段名列表
 func (self *Spider) GetItemFields(rule *Rule) []string {
 	return rule.ItemFields
@@ -261,6 +288,12 @@ func (self *Spider) ReqmatrixInit() *Spider {
 	return self
 }
 
+func (self *Spider) CanStop() bool {
+	self.lock.RLock()
+	defer self.lock.RUnlock()
+	return self.status != config.STOPPED && self.reqMatrix.CanStop()
+}
+
 func (self *Spider) IsStopping() bool {
 	self.lock.RLock()
 	defer self.lock.RUnlock()
@@ -271,4 +304,16 @@ func (self *Spider) tryPanic() {
 	if self.IsStopping() {
 		panic(FORCED_STOP)
 	}
+}
+// 退出任务前收尾工作
+func (self *Spider) Defer() {
+	// 取消所有定时器
+	if self.timer != nil {
+		self.timer.drop()
+		self.timer = nil
+	}
+	// 等待处理中的请求完成
+	self.reqMatrix.Wait()
+	// 更新失败记录
+	self.reqMatrix.TryFlushFailure()
 }

@@ -19,12 +19,8 @@ const (
 
 //mongodb
 const (
-	MGO_URL     string = "127.0.0.1"
+	MGO_CONN     string = "127.0.0.1:27017"
 	MGO_DB      string = "BookDb"
-	MGO_USER    string = ""
-	MGO_PASS    string = ""
-	MGO_PORT    int    = 27017
-	COLLECTION  string = "BookCover"
 	MGO_POOL    int    = 2048
 )
 

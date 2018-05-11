@@ -7,11 +7,12 @@ import (
 	"fmt"
 	"github.com/alezh/novel/config"
 	"time"
+	"github.com/alezh/novel/storage"
 )
 
 type Collector struct {
 	*Spider                    //绑定的采集规则
-	//*storage.DataSource
+	*storage.DataSource
 	DataChan       chan Data //文本数据收集通道
 	dataDocker     []Data    //分批输出结果缓存
 	outType        string             //输出方式
@@ -27,7 +28,7 @@ type Collector struct {
 func NewCollector(sp *Spider) *Collector {
 	var self = &Collector{}
 	self.Spider = sp
-	//self.DataSource = storage.Source
+	self.DataSource = storage.Source
 	self.outType = config.Task.OutType
 	if config.Task.DockerCap < 1 {
 		config.Task.DockerCap = 1
