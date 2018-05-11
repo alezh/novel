@@ -31,18 +31,13 @@ type (
 		ShowSQL bool                    //true则会在控制台打印出生成的SQL语句；
 	}
 	MgoConfig struct {
-		MgoIP string
+		MgoConn string
 		MgoDB string
-		MgoUser string
-		MgoPass string
-		MgoPort int
-		Collection string
 		PoolLimit int
 	}
 	MongoDb struct {
 		Session *mgo.Session
 		Database *mgo.Database
-		Collection *mgo.Collection
 	}
 	DataSource struct {
 		Mysql   *xorm.Engine
@@ -73,12 +68,8 @@ func NewMysqlSource() MySqlDb {
 
 func NewMongoDBSource() MgoDB {
 	return &MgoConfig{
-		config.MGO_URL,
+		config.MGO_CONN,
 		config.MGO_DB,
-		config.MGO_USER,
-		config.MGO_PASS,
-		config.MGO_PORT,
-		config.COLLECTION,
 		config.MGO_POOL,
 	}
 }
@@ -120,11 +111,11 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 }
 
 func (m * MgoConfig)MongoDb() *MongoDb {
-	if m.MgoIP != ""{
+	if m.MgoConn != ""{
 		//fmt.Printf("mongodb://%d:$d@%s:%d/%d?minPoolSize=%s&maxIdleTimeMS=%s", m.MgoIP, m.MgoPort)
 		//fmt.Printf("mongodb://%d:$d@%s:%d,%s:%d/%d?minPoolSize=%s&maxIdleTimeMS=%s", m.MgoIP, m.MgoPort)
 		//connection := "mongodb://myuser:mypass@localhost:40001,otherhost:40001/mydb?minPoolSize=0&maxIdleTimeMS=3000"
-		session, err := mgo.Dial(fmt.Sprintf("%s:%d", m.MgoIP, m.MgoPort))
+		session, err := mgo.Dial(fmt.Sprintf("%d/%d", m.MgoConn, m.MgoDB))
 		//p, err := mgop.DialStrongPool(connection, 5)
 		if err != nil {
 			return nil
@@ -133,8 +124,7 @@ func (m * MgoConfig)MongoDb() *MongoDb {
 		session.SetPoolLimit(5000)
 		//session := p.AcquireSession()
 		database := session.DB(m.MgoDB)
-		collection := database.C(m.Collection)
-		return &MongoDb{session,database,collection}
+		return &MongoDb{session,database}
 	}
-	return &MongoDb{nil,nil,nil}
+	return &MongoDb{nil,nil}
 }
