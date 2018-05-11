@@ -1,16 +1,17 @@
 // 数据收集
-package data
+package pipeline
 
 import (
 	."github.com/alezh/novel/system/spider"
-	"github.com/alezh/novel/system/data/collector"
+	"github.com/alezh/novel/system/pipeline/collector"
+	"github.com/alezh/novel/system/data"
 )
 
 // 数据收集/输出管道
 type Pipeline interface {
 	Start()                          //启动
 	Stop()                           //停止
-	CollectData(Data) error          //收集数据单元
+	CollectData(data.Data) error          //收集数据单元
 }
 
 func New(sp *Spider) Pipeline {
