@@ -2,7 +2,7 @@ package reptilian
 
 import (
 	. "github.com/alezh/novel/system/spider"
-	"github.com/henrylee2cn/pholcus/common/util"
+	"github.com/alezh/novel/system/utils"
 )
 
 type (
@@ -45,7 +45,7 @@ func (self *rq) AddAll(list []*Spider) {
 
 // 添加keyin，遍历蜘蛛队列得到新的队列（已被显式赋值过的spider将不再重新分配Keyin）
 func (self *rq) AddKeyins(keyins string) {
-	keyinSlice := util.KeyinsParse(keyins)
+	keyinSlice := utils.KeyinsParse(keyins)
 	if len(keyinSlice) == 0 {
 		return
 	}

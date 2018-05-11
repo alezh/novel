@@ -3,15 +3,15 @@ package spider
 import (
 	"sync"
 	"github.com/alezh/novel/system/mission"
-	"github.com/henrylee2cn/pholcus/common/util"
 	"math"
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system/http/request"
 	"time"
+	"github.com/alezh/novel/system/utils"
 )
 
 const (
-	KEYIN       = util.USE_KEYIN // 若使用Spider.Keyin，则须在规则中设置初始值为USE_KEYIN
+	KEYIN       = utils.USE_KEYIN // 若使用Spider.Keyin，则须在规则中设置初始值为USE_KEYIN
 	LIMIT       = math.MaxInt64  // 如希望在规则中自定义控制Limit，则Limit初始值必须为LIMIT
 	FORCED_STOP = "——主动终止Spider——"
 )

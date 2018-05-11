@@ -14,7 +14,7 @@ import (
 	"io"
 	"golang.org/x/net/html/charset"
 	"io/ioutil"
-	"github.com/henrylee2cn/pholcus/common/util"
+	"github.com/alezh/novel/system/utils"
 )
 
 type Context struct {
@@ -471,5 +471,5 @@ func (self *Context) GetText() string {
 	if self.text == nil {
 		self.initText()
 	}
-	return util.Bytes2String(self.text)
+	return utils.Bytes2String(self.text)
 }
