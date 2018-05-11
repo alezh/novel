@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"github.com/alezh/novel/config"
 	"github.com/globalsign/mgo"
-	"github.com/alezh/mgop"
 	"fmt"
 )
 
@@ -122,7 +121,7 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 
 func (m * MgoConfig)MongoDb() *MongoDb {
 	if m.MgoIP != ""{
-		fmt.Fprintf("mongodb://%s:%d", m.MgoIP, m.MgoPort)
+		fmt.Printf("mongodb://%s:%d", m.MgoIP, m.MgoPort)
 		//connection := "mongodb://myuser:mypass@localhost:40001,otherhost:40001/mydb?minPoolSize=0&maxIdleTimeMS=3000"
 		session, err := mgo.Dial(fmt.Sprintf("%s:%d", m.MgoIP, m.MgoPort))
 		//p, err := mgop.DialStrongPool(connection, 5)

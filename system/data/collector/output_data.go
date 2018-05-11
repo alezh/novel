@@ -26,7 +26,7 @@ func (self *Collector) outputData() {
 	defer func() {
 		if p := recover(); p != nil {
 			//logs.Log.Informational(" * ")
-			fmt.Fprintf(" *     Panic  [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！ [ERROR]  %v\n",
+			fmt.Printf(" *     Panic  [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！ [ERROR]  %v\n",
 				self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen, p)
 			//logs.Log.App(" *     Panic  [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！ [ERROR]  %v\n",
 			//	self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen, p)
@@ -41,12 +41,12 @@ func (self *Collector) outputData() {
 
 	//logs.Log.Informational(" * ")
 	if err != nil {
-		fmt.Fprintf(" *     Fail  [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！ [ERROR]  %v\n",
+		fmt.Printf(" *     Fail  [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！ [ERROR]  %v\n",
 			self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen, err)
 		//logs.Log.App(" *     Fail  [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！ [ERROR]  %v\n",
 		//	self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen, err)
 	} else {
-		fmt.Fprintf(" *     [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！\n",
+		fmt.Printf(" *     [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！\n",
 			self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen)
 		//logs.Log.App(" *     [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！\n",
 		//	self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen)

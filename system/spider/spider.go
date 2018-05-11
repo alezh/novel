@@ -132,7 +132,7 @@ func (self *Spider) GetSubName() string {
 	self.once.Do(func() {
 		self.subName = self.GetKeyin()
 		if len([]rune(self.subName)) > 8 {
-			self.subName = util.MakeHash(self.subName)
+			self.subName = utils.MakeHash(self.subName)
 		}
 	})
 	return self.subName
