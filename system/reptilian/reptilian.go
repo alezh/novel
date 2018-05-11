@@ -2,7 +2,7 @@ package reptilian
 
 import (
 	."github.com/alezh/novel/system/spider"
-	"github.com/alezh/novel/system/pipeline/collector"
+	"github.com/alezh/novel/system/data/collector"
 	"github.com/alezh/novel/system/http"
 	"time"
 )
