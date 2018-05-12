@@ -46,11 +46,11 @@ func set() config.Configer {
 
 func defaultConfig(iniconf config.Configer) {
 
-	iniconf.Set("mgo Master::connection", MGO_CONN)
-	iniconf.Set("mgo Master::dbName", MGO_DB)
-	iniconf.Set("mgo Master::SetPoolLimit", "2048")
-	iniconf.Set("mgo Master::minPoolSize", "0")
-	iniconf.Set("mgo Master::maxIdleTimeMS", "2000")
+	iniconf.Set("mgo::connection", "127.0.0.1:27017")
+	iniconf.Set("mgo::dbName", "BookDb")
+	iniconf.Set("mgo::SetPoolLimit", "2048")
+	iniconf.Set("mgo::minPoolSize", "0")
+	iniconf.Set("mgo::maxIdleTimeMS", "2000")
 
 	iniconf.Set("mysql::host", MYSQL_IP)
 	iniconf.Set("mysql::dbname", MYSQL_DB)
@@ -79,20 +79,20 @@ func defaultConfig(iniconf config.Configer) {
 
 func trySet(iniconf config.Configer) {
 
-	if v := iniconf.String("mgoMaster::connection"); v == "" {
-		iniconf.Set("mgoMaster::connection", MGO_CONN)
+	if v := iniconf.String("mgo::connection"); v == "" {
+		iniconf.Set("mgo::connection", "127.0.0.1:27017")
 	}
-	if v := iniconf.String("mgoMaster::dbName"); v == "" {
-		iniconf.Set("mgoMaster::dbName", MGO_DB)
+	if v := iniconf.String("mgo::dbName"); v == "" {
+		iniconf.Set("mgo::dbName", "BookDb")
 	}
-	if v , e := iniconf.Int("mgoMaster::SetPoolLimit"); v <= 0 || e!=nil {
-		iniconf.Set("mgoMaster::SetPoolLimit", "2048")
+	if v , e := iniconf.Int("mgo::SetPoolLimit"); v <= 0 || e!=nil {
+		iniconf.Set("mgo::SetPoolLimit", "2048")
 	}
-	if v , e := iniconf.Int("mgoMaster::minPoolSize"); v <= 0 || e!=nil {
-		iniconf.Set("mgoMaster::minPoolSize", "0")
+	if v , e := iniconf.Int("mgo::minPoolSize"); v <= 0 || e!=nil {
+		iniconf.Set("mgo::minPoolSize", "0")
 	}
-	if v , e := iniconf.Int("mgoMaster::maxIdleTimeMS"); v <= 0 || e!=nil {
-		iniconf.Set("mgoMaster::maxIdleTimeMS", "2000")
+	if v , e := iniconf.Int("mgo::maxIdleTimeMS"); v <= 0 || e!=nil {
+		iniconf.Set("mgo::maxIdleTimeMS", "2000")
 	}
 
 

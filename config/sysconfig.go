@@ -78,11 +78,11 @@ func GetPageCount(i int) uint64 {
 	// 返回总数
 	return pageSum[0] + pageSum[1]
 }
-
+//成功计数器
 func PageSuccCount() {
 	atomic.AddUint64(&pageSum[0], 1)
 }
-
+//失败计数器
 func PageFailCount() {
 	atomic.AddUint64(&pageSum[1], 1)
 }

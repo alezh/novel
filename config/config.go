@@ -18,10 +18,12 @@ const (
 )
 
 //mongodb
-const (
-	MGO_CONN     string = "127.0.0.1:27017"
-	MGO_DB      string = "BookDb"
-	MGO_POOL    int    = 2048
+var (
+	MGO_CONN     string = setting.String("mgo::connection")
+	MGO_DB      string = setting.String("mgo::dbName")
+	MGO_POOL    int    = setting.DefaultInt("mgo::SetPoolLimit",2048)
+	MGO_MinPoolSize    int    = setting.DefaultInt("mgo::minPoolSize",0)
+	MGO_MaxIdleTimeMS    int    = setting.DefaultInt("mgo::minPoolSize",2000)
 )
 
 // 运行状态

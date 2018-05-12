@@ -34,6 +34,8 @@ type (
 		MgoConn string
 		MgoDB string
 		PoolLimit int
+		MinPoolSize int
+		MaxIdleTimeMS int
 	}
 	MongoDb struct {
 		Session *mgo.Session
@@ -71,6 +73,8 @@ func NewMongoDBSource() MgoDB {
 		config.MGO_CONN,
 		config.MGO_DB,
 		config.MGO_POOL,
+		config.MGO_MinPoolSize,
+		config.MGO_MaxIdleTimeMS,
 	}
 }
 
@@ -112,16 +116,17 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 
 func (m * MgoConfig)MongoDb() *MongoDb {
 	if m.MgoConn != ""{
-		//fmt.Printf("mongodb://%d:$d@%s:%d/%d?minPoolSize=%s&maxIdleTimeMS=%s", m.MgoIP, m.MgoPort)
+		//connection := fmt.Sprintf("mongodb://%s/%s?minPoolSize=%d&maxIdleTimeMS=%d", m.MgoConn, m.MgoDB,m.MinPoolSize,m.MaxIdleTimeMS)
+		//fmt.Print(connection)
 		//fmt.Printf("mongodb://%d:$d@%s:%d,%s:%d/%d?minPoolSize=%s&maxIdleTimeMS=%s", m.MgoIP, m.MgoPort)
 		//connection := "mongodb://myuser:mypass@localhost:40001,otherhost:40001/mydb?minPoolSize=0&maxIdleTimeMS=3000"
-		session, err := mgo.Dial(fmt.Sprintf("%d/%d", m.MgoConn, m.MgoDB))
+		session, err := mgo.Dial(fmt.Sprintf("mongodb://%s/%s?minPoolSize=%d&maxIdleTimeMS=%d", m.MgoConn, m.MgoDB,m.MinPoolSize,m.MaxIdleTimeMS))
 		//p, err := mgop.DialStrongPool(connection, 5)
 		if err != nil {
 			return nil
 			//panic(err.Error())
 		}
-		session.SetPoolLimit(5000)
+		session.SetPoolLimit(m.PoolLimit)
 		//session := p.AcquireSession()
 		database := session.DB(m.MgoDB)
 		return &MongoDb{session,database}
