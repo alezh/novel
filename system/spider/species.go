@@ -1,15 +1,19 @@
 package spider
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/alezh/novel/system/pinyin"
+)
 
 type Species struct {
 	list   []*Spider
 	hash   map[string]*Spider
+	sorted bool
 }
 
 var SpeciesCollection = &Species{
-	make([]*Spider,0),
-	make(map[string]*Spider,0),
+	list:make([]*Spider,0),
+	hash:make(map[string]*Spider,0),
 }
 
 //载入规则
@@ -28,9 +32,24 @@ func (s *Species)Load(spider *Spider) *Spider {
 	return spider
 }
 
-func (s *Species) Get () []*Spider {
-	if len(s.list)>0{
-		return s.list
+func (self *Species) Get () []*Spider {
+	if !self.sorted {
+		l := len(self.list)
+		initials := make([]string, l)
+		newlist := map[string]*Spider{}
+		for i := 0; i < l; i++ {
+			initials[i] = self.list[i].GetName()
+			newlist[initials[i]] = self.list[i]
+		}
+		pinyin.SortInitials(initials)
+		for i := 0; i < l; i++ {
+			self.list[i] = newlist[initials[i]]
+		}
+		self.sorted = true
 	}
-	return nil
+	return self.list
+}
+
+func (self *Species) GetByName(name string) *Spider {
+	return self.hash[name]
 }
