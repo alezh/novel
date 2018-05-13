@@ -277,6 +277,13 @@ func (self *Spider) Copy() *Spider {
 
 	return ghost
 }
+// 自定义暂停时间 pause[0]~(pause[0]+pause[1])，优先级高于外部传参
+// 当且仅当runtime[0]为true时可覆盖现有值
+//func (self *Spider) SetPausetime(pause int64, runtime ...bool) {
+//	if self.Pausetime == 0 || len(runtime) > 0 && runtime[0] {
+//		self.Pausetime = pause
+//	}
+//}
 
 func (self *Spider) ReqmatrixInit() *Spider {
 	if self.Limit < 0 {

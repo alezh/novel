@@ -206,6 +206,58 @@ func (self *Context) ResetText(body string) *Context {
 	return self
 }
 
+
+// 输出文本结果。
+// item类型为map[int]interface{}时，根据ruleName现有的ItemFields字段进行输出，
+// item类型为map[string]interface{}时，ruleName不存在的ItemFields字段将被自动添加，
+// ruleName为空时默认当前规则。
+func (self *Context) Output(item interface{}, ruleName ...string) {
+	_ruleName, rule, found := self.getRule(ruleName...)
+	if !found {
+		//logs.Log.Error("蜘蛛 %s 调用Output()时，指定的规则名不存在！", self.spider.GetName())
+		return
+	}
+	var _item map[string]interface{}
+	switch item2 := item.(type) {
+	case map[int]interface{}:
+		_item = self.CreatItem(item2, _ruleName)
+	case request.Temp:
+		for k := range item2 {
+			self.spider.UpsertItemField(rule, k)
+		}
+		_item = item2
+	case map[string]interface{}:
+		for k := range item2 {
+			self.spider.UpsertItemField(rule, k)
+		}
+		_item = item2
+	}
+	self.Lock()
+	//if self.spider.NotDefaultField {
+	//	self.items = append(self.items, data.GetDataCell(_ruleName, _item, "", "", ""))
+	//} else {
+		self.items = append(self.items, data.GetDataCell(_ruleName, _item, self.GetUrl(), self.GetReferer(), time.Now().Format("2006-01-02 15:04:05")))
+	//}
+	self.Unlock()
+}
+
+// 生成文本结果。
+// 用ruleName指定匹配的ItemFields字段，为空时默认当前规则。
+func (self *Context) CreatItem(item map[int]interface{}, ruleName ...string) map[string]interface{} {
+	_, rule, found := self.getRule(ruleName...)
+	if !found {
+		//logs.Log.Error("蜘蛛 %s 调用CreatItem()时，指定的规则名不存在！", self.spider.GetName())
+		return nil
+	}
+
+	var item2 = make(map[string]interface{}, len(item))
+	for k, v := range item {
+		field := self.spider.GetItemField(rule, k)
+		item2[field] = v
+	}
+	return item2
+}
+
 //**************************************** 私有方法 *******************************************\\
 
 // 获取规则。

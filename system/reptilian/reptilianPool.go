@@ -8,7 +8,10 @@ import (
 
 type (
 	ReptilianPool interface {
-
+		Reset(int) int
+		Use() Reptilian
+		Free(Reptilian)
+		Stop()
 	}
 	rp struct {
 		capacity int
