@@ -14,8 +14,8 @@ import (
 	"github.com/alezh/novel/system/reptilian"
 	"strconv"
 	"github.com/alezh/novel/system/data/collector"
-	"github.com/alezh/novel/system/data"
 	"fmt"
+	"github.com/alezh/novel/system/pipeline"
 )
 
 type (
@@ -60,10 +60,10 @@ func initSystem() *System {
 		SysConfig:   config.Task,
 		Species:     spider.SpeciesCollection,
 		status:      config.STOPPED,
-		SpiderQueue: reptilian.NewPool(),
+		SpiderQueue: reptilian.NewQueue(),
 		Teleport:    teleport.New(),
 		TaskJar:     mission.NewTaskJar(),
-		ReptilianPool:reptilian.NewPool(),
+		ReptilianPool:reptilian.NewReptilianPool(),
 	}
 	return sys
 }
@@ -81,7 +81,7 @@ func (sys *System)Init(mode int, port int, master string, w ...io.Writer) Enging
 	sys.SysConfig.Mode, sys.SysConfig.Port, sys.SysConfig.Master = mode, port, master
 	sys.Teleport = teleport.New()
 	sys.TaskJar = mission.NewTaskJar()
-	sys.SpiderQueue = reptilian.NewPool()
+	sys.SpiderQueue = reptilian.NewQueue()
 
 	switch sys.SysConfig.Mode{
 	case config.SERVER:
@@ -297,7 +297,7 @@ func (self *System) server() {
 	if tasksNum == 0 {
 		return
 	}
-
+	fmt.Printf("—— 本次成功添加 %v 条任务，共包含 %v 条采集规则 ——", tasksNum, spidersNum)
 	// 打印报告
 	//logs.Log.Informational(" * ")
 	//logs.Log.Informational(` *********************************************************************************************************************************** `)
@@ -422,7 +422,7 @@ func (self *System) exec() {
 	count := self.SpiderQueue.Len()
 	config.ResetPageCount()
 	// 刷新输出方式的状态
-	data.RefreshOutput()
+	pipeline.RefreshOutput()
 	// 初始化资源队列
 	mission.Init()
 

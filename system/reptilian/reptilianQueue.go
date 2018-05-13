@@ -22,7 +22,7 @@ type (
 	}
 )
 
-func NewPool() SpiderQueue {
+func NewQueue() SpiderQueue {
 	return &rq{
 		list: []*Spider{},
 	}
