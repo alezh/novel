@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/alezh/novel/modules"
+	."github.com/alezh/novel/modules/controller"
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris"
 	"github.com/alezh/novel/system"
@@ -10,7 +10,7 @@ import (
 var install = mvc.Response{Path: "/Index/install", Code: iris.StatusSeeOther}
 
 type IndexController struct {
-	modules.BaseController
+	BaseController
 }
 
 type formValue func(string) string

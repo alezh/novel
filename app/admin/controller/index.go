@@ -3,15 +3,15 @@ package controller
 import (
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris"
-	"github.com/alezh/novel/modules"
-	"github.com/alezh/novel/modules/user"
+	."github.com/alezh/novel/modules/controller"
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system"
+	"github.com/alezh/novel/app/admin/services"
 )
 
 type AdminController struct {
-	modules.AuthController
-	user.User
+	AuthController
+	Service services.UserService
 }
 
 type formValue func(string) string
@@ -29,9 +29,9 @@ func (c *AdminController)GetIndex() {
 	if err != nil || id <= 0{
 
 	}
-	use := new(user.User)
-	c.Source.Mysql.Get(use)
-	c.Ctx.Text(use.User)
+	//use := new(user.User)
+	//c.Source.Mysql.Get(use)
+	//c.Ctx.Text(use.User)
 }
 
 // GetBy handles GET:/user/{id:long},
@@ -51,10 +51,10 @@ func (c *AdminController)Post()  {
 }
 
 func (c *AdminController)PostLogin(form formValue) {
-	var (
-		username = form("username")
-		password = form("password")
-	)
+	//var (
+	//	username = form("username")
+	//	password = form("password")
+	//)
 }
 
 // 服务器开启 POST :/Admin/engine/start

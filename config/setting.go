@@ -88,7 +88,7 @@ func trySet(iniconf config.Configer) {
 	if v , e := iniconf.Int("mgo::SetPoolLimit"); v <= 0 || e!=nil {
 		iniconf.Set("mgo::SetPoolLimit", "2048")
 	}
-	if v , e := iniconf.Int("mgo::minPoolSize"); v <= 0 || e!=nil {
+	if v , e := iniconf.Int("mgo::minPoolSize"); v < 0 || e!=nil {
 		iniconf.Set("mgo::minPoolSize", "0")
 	}
 	if v , e := iniconf.Int("mgo::maxIdleTimeMS"); v <= 0 || e!=nil {

@@ -5,6 +5,8 @@ import (
 	adminController "github.com/alezh/novel/app/admin/controller"
 	indexController "github.com/alezh/novel/app/index/controller"
 	"github.com/alezh/novel/storage"
+	"github.com/alezh/novel/app/admin/repositories"
+	"github.com/alezh/novel/app/admin/services"
 )
 
 func init()  {
@@ -12,9 +14,10 @@ func init()  {
 }
 
 func AdminRoutes(m *mvc.Application)  {
+	repo := repositories.NewUserRepository(storage.Source)
 	admin := m.Party("/Admin")
 	admin.Register(
-		storage.Source,
+		services.NewUserService(repo),
 		webApp.Sessions.Start,
 	)
 	admin.Handle(new(adminController.AdminController))
@@ -30,7 +33,7 @@ func AdminRoutes(m *mvc.Application)  {
 func IndexRoutes(m *mvc.Application)  {
 	index := m.Party("/Index")
 	index.Register(
-		storage.Source,
+		//storage.Source,
 		webApp.Sessions.Start,
 	)
 	index.Handle(new(indexController.IndexController))
