@@ -17,5 +17,10 @@ type UserMgo struct {
 	Id        bson.ObjectId `bson:"_id"`
 	User      string
 	Pass      string
+	Admin     int
 	Created   bson.MongoTimestamp //创建时间戳
+}
+
+func Verify(username, password string)  {
+
 }

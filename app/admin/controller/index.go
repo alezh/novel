@@ -11,7 +11,7 @@ import (
 
 type AdminController struct {
 	modules.AuthController
-
+	user.User
 }
 
 type formValue func(string) string
@@ -51,7 +51,10 @@ func (c *AdminController)Post()  {
 }
 
 func (c *AdminController)PostLogin(form formValue) {
-
+	var (
+		username = form("username")
+		password = form("password")
+	)
 }
 
 // 服务器开启 POST :/Admin/engine/start
