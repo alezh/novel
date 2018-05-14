@@ -49,7 +49,7 @@ func (b *Bootstrapper) SetupViewsNotLayout(viewsDir string) {
 // SetupSessions initializes the sessions, optionally.
 func (b *Bootstrapper) SetupSessions(expires time.Duration, cookieHashKey, cookieBlockKey []byte) {
 	b.Sessions = sessions.New(sessions.Config{
-		Cookie:   "SECRET_SESS_COOKIE_" + b.AppName,
+		Cookie:   "SECRET_COOKIE_" + b.AppName,
 		Expires:  expires,
 		Encoding: securecookie.New(cookieHashKey, cookieBlockKey),
 	})

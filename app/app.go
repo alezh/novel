@@ -14,7 +14,7 @@ var webApp  *bootstrap.Bootstrapper
 
 
 func NewApp() *bootstrap.Bootstrapper{
-	webApp = bootstrap.New("Network novel system", "alezh.liu@gmail.com")
+	webApp = bootstrap.New("Novel", "alezh.liu@gmail.com")
 	webApp.SetupViewsNotLayout("./views")
 	webApp.SetupSessions(24*time.Hour,
 		[]byte("the-big-and-secret-fash-key-here"),
