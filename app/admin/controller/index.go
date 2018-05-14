@@ -7,7 +7,6 @@ import (
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system"
 	"github.com/alezh/novel/app/admin/services"
-	"fmt"
 )
 
 type AdminController struct {
@@ -28,7 +27,6 @@ func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 // GetIndex handles GET:/Admin/index
 func (c *AdminController)GetIndex() mvc.Result{
 	id:= c.Session.GetString(config.SessionIDKey)
-	fmt.Println(id)
 	if id != ""{
 		return mvc.View{
 			Name:"admin/default.html",
@@ -68,7 +66,6 @@ func (c *AdminController)PostLogin(form formValue) mvc.Result{
 	if id ,ok := c.Service.GetByUsernameAndPassword(username,password);ok{
 		//c.Session.Destroy()
 		c.Session.SetImmutable(config.SessionIDKey, id)
-		fmt.Println(c.Session.GetString(config.SessionIDKey))
 		return mvc.Response{
 			Path: "/Admin/index",
 			Code: iris.StatusSeeOther,

@@ -2,9 +2,6 @@ package bootstrap
 
 import (
 	"time"
-
-	//"github.com/gorilla/securecookie"
-
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
