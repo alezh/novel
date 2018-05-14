@@ -17,6 +17,7 @@ type AdminController struct {
 
 type formValue func(string) string
 
+
 //在服务器启动前和控制器注册前调用一次，在这里您可以向该控制器添加依赖项，并且只允许主调用方跳过。
 func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 	// 绑定依赖
@@ -65,10 +66,12 @@ func (c *AdminController)PostLogin(form formValue) mvc.Result{
 		password = form("password")
 	)
 	if id ,ok := c.Service.GetByUsernameAndPassword(username,password);ok{
-		fmt.Println(id)
-		c.Session.Set(config.SessionIDKey, id)
+		c.Session.Destroy()
+		c.Session.SetImmutable(config.SessionIDKey, id)
+		fmt.Println(c.Session.GetString(config.SessionIDKey))
 		return mvc.Response{
 			Path: "/Admin/index",
+			Code: iris.StatusSeeOther,
 		}
 	}else{
 		return mvc.Response{

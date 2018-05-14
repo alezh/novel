@@ -82,7 +82,7 @@ func (r *userMgoRepository)Verify(username, password string) (interface{},bool) 
 	if r.Select(search,user){
 		hash := []byte(user.Pass)
 		if ok, _ := user.ValidatePassword(password,hash);ok{
-			return user.Id ,true
+			return user.Id.Hex() ,true
 		}
 	}
 	return nil, false

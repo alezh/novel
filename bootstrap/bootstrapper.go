@@ -3,13 +3,14 @@ package bootstrap
 import (
 	"time"
 
-	"github.com/gorilla/securecookie"
+	//"github.com/gorilla/securecookie"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
 	"github.com/kataras/iris/sessions"
 	"github.com/kataras/iris/websocket"
+	"github.com/gorilla/securecookie"
 )
 
 type Configurator func(*Bootstrapper)
