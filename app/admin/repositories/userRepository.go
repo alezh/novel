@@ -14,58 +14,106 @@ type (
     //Query func(User) bool
 
 	UserRepository interface {
+		Verify(username, password string) (interface{},bool)
+		SelectById(id,pSlice interface{}) bool
 		Select(interface{},interface{}) bool
 		SelectMany(interface{},string,interface{}) bool
 		InsertOrUpdate(interface{}) bool
 		Insert(interface{}) bool
+		InsertUser(name,userPassword string,admin int) bool
+		Update(id,pData interface{}) bool
 		//Delete(query Query, limit int) (deleted bool)
 	}
 	userRepository struct {
 		source *storage.DataSource
 		mu     sync.RWMutex
+		User   User
+	}
+	userMgoRepository struct {
+		source *storage.DataSource
+		mu     sync.RWMutex
+		User   UserMgo
 	}
 )
 
 func NewUserRepository(source *storage.DataSource) UserRepository {
-	return &userRepository{source: source}
-}
-
-func (r *userRepository)Select(search interface{},pSlice interface{}) bool {
 	switch config.Task.OutType {
 	case "mgo":
-		return r.mgoFind(search.(bson.M),pSlice)
+		return &userMgoRepository{source: source}
 	case "mysql":
+		return &userRepository{source: source}
+	default:
+		return &userRepository{source: source}
 	}
+}
+func (r *userRepository)Verify(username, password string) (interface{},bool) {
+	return nil,false
+}
+func (r *userRepository)SelectById(id,pSlice interface{}) bool  {
+	return false
+}
+func (r *userRepository)Select(search interface{},pSlice interface{}) bool {
 	return false
 }
 func (r *userRepository)SelectMany(search interface{},sortKey string, pSlice interface{}) bool {
-	switch config.Task.OutType {
-	case "mgo":
-		return  r.mgoFindAll(search.(bson.M),sortKey,pSlice)
-	case "mysql":
-	}
 	return false
 }
 
 func (r *userRepository)InsertOrUpdate(pSlice interface{}) bool {
-	switch config.Task.OutType {
-	case "mgo":
-		return r.mgoInsertOrUpdate(pSlice)
-	case "mysql":
-	}
 	return false
 }
 
 func (r *userRepository)Insert(pSlice interface{}) bool{
-	switch config.Task.OutType {
-	case "mgo":
-		return r.mgoInsert(pSlice)
-	case "mysql":
-	}
+	return false
+}
+func (r *userRepository)Update(id,pData interface{}) bool {
+	return false
+}
+func (r *userRepository)InsertUser(name,userPassword string,admin int) bool{
 	return false
 }
 
-func (r *userRepository)mgoFind(search bson.M, pSlice interface{})  bool {
+
+//--------------------------------mgo----------------------------------------------------------------------------------
+
+func (r *userMgoRepository)Verify(username, password string) (interface{},bool) {
+	user := new(UserMgo)
+	search := bson.M{"user": username}
+	if r.Select(search,user){
+		hash := []byte(user.Pass)
+		if ok, _ := user.ValidatePassword(password,hash);ok{
+			return user.Id ,true
+		}
+	}
+	return nil, false
+}
+
+func (r *userMgoRepository)InsertUser(name,userPassword string,admin int) bool{
+	user := new(UserMgo)
+	objId := bson.NewObjectId()
+	hashed, _ := user.GeneratePassword(userPassword)
+	user.Id   = objId
+	user.User = name
+	user.Admin = admin
+	user.Pass = string(hashed)
+	return r.Insert(user)
+}
+
+func (r *userMgoRepository)SelectById(id,pSlice interface{}) bool {
+	coll := r.source.MongoDb.Database.C(Table)
+	err := coll.FindId(id).One(pSlice)
+	if err != nil {
+		if err == mgo.ErrNotFound {
+			fmt.Printf("Not Find findId: %v", id)
+		} else {
+			fmt.Println(err.Error())
+		}
+		return false
+	}
+	return true
+}
+
+func (r *userMgoRepository)Select(search interface{}, pSlice interface{})  bool {
 	coll := r.source.MongoDb.Database.C(Table)
 	err := coll.Find(search).One(pSlice)
 	if err != nil {
@@ -79,7 +127,7 @@ func (r *userRepository)mgoFind(search bson.M, pSlice interface{})  bool {
 	return true
 }
 
-func (r *userRepository)mgoFindAll(search bson.M , sortKey string, pSlice interface{}) bool {
+func (r *userMgoRepository)SelectMany(search interface{} , sortKey string, pSlice interface{}) bool {
 	coll := r.source.MongoDb.Database.C(Table)
 	var err error
 	if sortKey == ""{
@@ -98,7 +146,7 @@ func (r *userRepository)mgoFindAll(search bson.M , sortKey string, pSlice interf
 	return true
 }
 
-func (r *userRepository)mgoUpdate(id,pData interface{}) bool {
+func (r *userMgoRepository)Update(id,pData interface{}) bool {
 	coll := r.source.MongoDb.Database.C(Table)
 	err := coll.UpdateId(id, pData)
 	if err != nil {
@@ -109,12 +157,12 @@ func (r *userRepository)mgoUpdate(id,pData interface{}) bool {
 	return true
 }
 
-func (r *userRepository)mgoInsertOrUpdate(pData interface{}) bool {
+func (r *userMgoRepository)InsertOrUpdate(pData interface{}) bool {
 	user := pData.(UserMgo)
 	search := bson.M{"user": user.User}
 	result := UserMgo{}
-	if err := r.mgoFind(search,result);err{
-		r.mgoUpdate(result.Id,result)
+	if err := r.Select(search,result);err{
+		r.Update(result.Id,result)
 		return false
 	}else {
 		coll := r.source.MongoDb.Database.C(Table)
@@ -127,7 +175,7 @@ func (r *userRepository)mgoInsertOrUpdate(pData interface{}) bool {
 	}
 }
 
-func (r *userRepository)mgoInsert(pData interface{}) bool {
+func (r *userMgoRepository)Insert(pData interface{}) bool {
 	coll := r.source.MongoDb.Database.C(Table)
 	err := coll.Insert(pData)
 	if err != nil {

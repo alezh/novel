@@ -3,10 +3,11 @@ package controller
 import (
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris"
-	."github.com/alezh/novel/modules/controller"
+	."github.com/alezh/novel/modules/basics"
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system"
 	"github.com/alezh/novel/app/admin/services"
+	"fmt"
 )
 
 type AdminController struct {
@@ -24,14 +25,21 @@ func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 }
 
 // GetIndex handles GET:/Admin/index
-func (c *AdminController)GetIndex() {
-	id, err := c.Session.GetInt64(config.SessionIDKey)
-	if err != nil || id <= 0{
-
+func (c *AdminController)GetIndex() mvc.Result{
+	id:= c.Session.GetString(config.SessionIDKey)
+	fmt.Println(id)
+	if id != ""{
+		return mvc.View{
+			Name:"admin/default.html",
+			Data:iris.Map{"User":id},
+		}
 	}
 	//use := new(user.User)
 	//c.Source.Mysql.Get(use)
 	//c.Ctx.Text(use.User)
+	return mvc.Response{
+		Path: "/Admin/login",
+	}
 }
 
 // GetBy handles GET:/user/{id:long},
@@ -40,6 +48,7 @@ func (c *AdminController)GetBy(userID int64){
 }
 
 func (c *AdminController)GetLogin()  mvc.Result{
+
 	return mvc.View{
 		Name:"admin/login.html",
 		Data:iris.Map{"config":"1"},
@@ -50,11 +59,22 @@ func (c *AdminController)Post()  {
 	c.Ctx.Text("^……^")
 }
 
-func (c *AdminController)PostLogin(form formValue) {
-	//var (
-	//	username = form("username")
-	//	password = form("password")
-	//)
+func (c *AdminController)PostLogin(form formValue) mvc.Result{
+	var (
+		username = form("username")
+		password = form("password")
+	)
+	if id ,ok := c.Service.GetByUsernameAndPassword(username,password);ok{
+		fmt.Println(id)
+		c.Session.Set(config.SessionIDKey, id)
+		return mvc.Response{
+			Path: "/Admin/index",
+		}
+	}else{
+		return mvc.Response{
+			Path: "/Admin/login",
+		}
+	}
 }
 
 // 服务器开启 POST :/Admin/engine/start

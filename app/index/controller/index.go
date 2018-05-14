@@ -1,7 +1,7 @@
 package controller
 
 import (
-	."github.com/alezh/novel/modules/controller"
+	."github.com/alezh/novel/modules/basics"
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris"
 	"github.com/alezh/novel/system"
