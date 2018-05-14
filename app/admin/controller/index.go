@@ -66,7 +66,7 @@ func (c *AdminController)PostLogin(form formValue) mvc.Result{
 		password = form("password")
 	)
 	if id ,ok := c.Service.GetByUsernameAndPassword(username,password);ok{
-		c.Session.Destroy()
+		//c.Session.Destroy()
 		c.Session.SetImmutable(config.SessionIDKey, id)
 		fmt.Println(c.Session.GetString(config.SessionIDKey))
 		return mvc.Response{
