@@ -16,7 +16,15 @@ import (
 	"github.com/alezh/novel/system/data/collector"
 	"fmt"
 	"github.com/alezh/novel/system/pipeline"
+	"runtime"
 )
+
+func init()  {
+	// 开启最大核心数运行
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	// 开启手动GC
+	ManualGC()
+}
 
 type (
 	Enging interface {
