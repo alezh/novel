@@ -9,7 +9,7 @@ layui.use(['layer', 'form', 'element', 'jquery', 'dialog'], function() {
 	var mainMask = $('.main-mask');
 	//监听导航点击
 	element.on('nav(leftNav)', function(elem) {
-		var navA = $(elem).find('a');
+		var navA = $(elem);
 		var id = navA.attr('data-id');
 		var url = navA.attr('data-url');
 		var text = navA.attr('data-text');
@@ -33,7 +33,7 @@ layui.use(['layer', 'form', 'element', 'jquery', 'dialog'], function() {
 	});
 	//监听导航点击
 	element.on('nav(rightNav)', function(elem) {
-		var navA = $(elem).find('a');
+		var navA = $(elem);
 		var id = navA.attr('data-id');
 		var url = navA.attr('data-url');
 		var text = navA.attr('data-text');

@@ -7,6 +7,7 @@ import (
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system"
 	"github.com/alezh/novel/app/admin/services"
+	"github.com/alezh/novel/system/utils"
 )
 
 type AdminController struct {
@@ -64,7 +65,6 @@ func (c *AdminController)PostLogin(form formValue) mvc.Result{
 		password = form("password")
 	)
 	if id ,ok := c.Service.GetByUsernameAndPassword(username,password);ok{
-		//c.Session.Destroy()
 		c.Session.SetImmutable(config.SessionIDKey, id)
 		return mvc.Response{
 			Path: "/Admin/index",
@@ -78,7 +78,16 @@ func (c *AdminController)PostLogin(form formValue) mvc.Result{
 }
 
 // 服务器开启 POST :/Admin/engine/start
-func (c *AdminController)PostEngineStart()  {
+func (c *AdminController)PostEngineStart(form formValue)  {
+	var mode = utils.Atoi(form("mode"))
+	var port = utils.Atoi(form("port"))
+	var master = utils.Atoa(form("ip")) //服务器(主节点)地址，不含端口
+	currMode := system.SystemInfo.GetConfig("mode").(int)
+	if currMode == config.UNSET{
+		system.SystemInfo.Init(mode, port, master)
+	}else{
+		system.SystemInfo.ReInit(mode, port, master)
+	}
 	system.SystemInfo.SetConfig("Mode", config.OFFLINE)
 	system.SystemInfo.Start()
 }

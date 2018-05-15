@@ -5,26 +5,29 @@ import (
 	"github.com/kataras/iris/sessions"
 	"github.com/kataras/iris/mvc"
 	"strings"
-	"strconv"
 	"github.com/alezh/novel/config"
 )
 
 type AuthController struct {
 	Ctx iris.Context
 	Session *sessions.Session
-	UserID int64
-	DbType string
+	UserID string
 }
 
 var (
-	PathLogin  = mvc.Response{Path: "/user/login"}
-	PathLogout = mvc.Response{Path: "/user/logout"}
+	PathLogin  = mvc.Response{Path: "/Admin/login"}
+	PathLogout = mvc.Response{Path: "/Admin/logout"}
 )
 
 
 
 func (c *AuthController) BeginRequest(ctx iris.Context) {
-	c.UserID, _ = c.Session.GetInt64(config.SessionIDKey)
+	if "/Admin/login" != ctx.GetCurrentRoute().Path(){
+		c.UserID = c.Session.GetString(config.SessionIDKey)
+		if c.UserID == ""{
+			c.redirect()
+		}
+	}
 }
 
 func (c *AuthController) EndRequest(ctx iris.Context) {}
@@ -37,8 +40,8 @@ func (c *AuthController) fireError(err error) mvc.View {
 	}
 }
 
-func (c *AuthController) redirectTo(id int64) mvc.Response {
-	return mvc.Response{Path: "/user/" + strconv.Itoa(int(id))}
+func (c *AuthController) redirect() mvc.Response {
+	return mvc.Response{Path: "/Admin/login"}
 }
 
 //func (c *AuthController) createOrUpdate(firstname, username, password string) (user Model, err error) {
@@ -64,7 +67,7 @@ func (c *AuthController) redirectTo(id int64) mvc.Response {
 func (c *AuthController) isLoggedIn() bool {
 	// we don't search by session, we have the user id
 	// already by the `BeginRequest` middleware.
-	return c.UserID > 0
+	return c.UserID != ""
 }
 
 //func (c *AuthController) verify(username, password string) (user Model, err error) {

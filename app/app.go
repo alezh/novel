@@ -5,7 +5,7 @@ import (
 	"time"
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
-	//_ "github.com/alezh/novel/lib"
+	_ "github.com/alezh/novel/lib"
 )
 
 //var WebApp = NewApp()
