@@ -4,6 +4,7 @@ import (
 	"github.com/kataras/iris/mvc"
 	"github.com/alezh/novel/system"
 	"fmt"
+	"github.com/kataras/iris"
 )
 
 // get:/Admin/crawler/list
@@ -19,6 +20,6 @@ func (c *AdminController)GetCrawlerList()mvc.Result{
 	fmt.Println(spiderMenu)
 	return mvc.View{
 		Name:"admin/crawler/list.html",
-		Data:spiderMenu,
+		Data:iris.Map{"data":spiderMenu},
 	}
 }
