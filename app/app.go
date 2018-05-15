@@ -5,7 +5,7 @@ import (
 	"time"
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
-	//"github.com/kataras/iris/mvc"
+	//_ "github.com/alezh/novel/lib"
 )
 
 //var WebApp = NewApp()
@@ -14,6 +14,7 @@ var webApp  *bootstrap.Bootstrapper
 
 
 func NewApp() *bootstrap.Bootstrapper{
+
 	webApp = bootstrap.New("Novel", "alezh.liu@gmail.com")
 	webApp.SetupViewsNotLayout("./views")
 	webApp.SetupSessions(24*time.Hour,

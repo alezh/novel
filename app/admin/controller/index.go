@@ -23,7 +23,10 @@ func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 	// form传入数据函数
 	b.Dependencies().Add(func(ctx iris.Context) formValue { return ctx.FormValue })
 }
-
+// GetBy handles GET:/Admin,
+func (c *AdminController)Get() mvc.Result{
+	return c.GetIndex()
+}
 // GetIndex handles GET:/Admin/index
 func (c *AdminController)GetIndex() mvc.Result{
 	id:= c.Session.GetString(config.SessionIDKey)
@@ -33,9 +36,6 @@ func (c *AdminController)GetIndex() mvc.Result{
 			Data:iris.Map{"User":id},
 		}
 	}
-	//use := new(user.User)
-	//c.Source.Mysql.Get(use)
-	//c.Ctx.Text(use.User)
 	return mvc.Response{
 		Path: "/Admin/login",
 	}

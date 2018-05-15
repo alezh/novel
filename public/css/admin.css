@@ -2142,3 +2142,6 @@
     margin-left: 80px;
   }
 }
+.layui-nav .layui-nav-item a{
+  color: #c2c2c2;
+}
