@@ -50,6 +50,7 @@ func (self *Collector) outputData() {
 			self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen)
 		//logs.Log.App(" *     [数据输出：%v | KEYIN：%v | 批次：%v]   数据 %v 条！\n",
 		//	self.Spider.GetName(), self.Spider.GetKeyin(), self.dataBatch, dataLen)
-		self.Spider.TryFlushSuccess()
+
+		//self.Spider.TryFlushSuccess()
 	}
 }

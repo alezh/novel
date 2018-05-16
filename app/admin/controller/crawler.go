@@ -8,6 +8,7 @@ import (
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system/spider"
 	"encoding/json"
+	"fmt"
 )
 
 // get:/Admin/crawler/list
@@ -25,23 +26,28 @@ func (c *AdminController)GetCrawlerList()mvc.Result{
 	}
 }
 
-// 添加任务
-func (c *AdminController)PostAddQeueu(form formValue)  {
+// 添加任务 post:/Admin/add/queue
+func (c *AdminController)PostAddQueue(form formValue)  {
 	var spNames map[string]interface{}
 	data := form("spider")
 	if data != ""{
 		json.Unmarshal([]byte(data), &spNames)
 	}
+	fmt.Println(spNames)
 
 	spiders := []*spider.Spider{}
-	for _, sp := range system.SystemInfo.GetSpiderLib() {
-		for _, spName := range spNames {
-			if utils.Atoa(spName) == sp.GetName() {
-				spiders = append(spiders, sp.Copy())
-			}
-		}
-	}
+	sp := system.SystemInfo.GetSpiderByName("抓取测试")
+	spiders = append(spiders, sp.Copy())
+	//for _, sp := range system.SystemInfo.GetSpiderLib() {
+	//	for _, spName := range spNames {
+	//		if utils.Atoa(spName) == sp.GetName() {
+	//			spiders = append(spiders, sp.Copy())
+	//		}
+	//	}
+	//}
 	system.SystemInfo.SpiderPrepare(spiders)
+	jsons := iris.Map{"len":system.SystemInfo.GetSpiderQueue().Len(),"sp":spiders}
+	c.Ctx.JSON(jsons)
 }
 
 

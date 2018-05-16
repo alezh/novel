@@ -15,12 +15,15 @@ type AdminController struct {
 
 type formValue func(string) string
 
+type formValues func() map[string][]string
+
 
 //在服务器启动前和控制器注册前调用一次，在这里您可以向该控制器添加依赖项，并且只允许主调用方跳过。
 func (c *AdminController) BeforeActivation(b mvc.BeforeActivation) {
 	// 绑定依赖
 	// form传入数据函数
-	b.Dependencies().Add(func(ctx iris.Context) formValue { return ctx.FormValue })
+	b.Dependencies().Add(func(ctx iris.Context) formValue { return ctx.FormValue },
+		                 func(ctx iris.Context) formValues { return ctx.FormValues })
 }
 // GetBy handles GET:/Admin,
 func (c *AdminController)Get() mvc.Result{

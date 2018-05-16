@@ -58,8 +58,8 @@
                 <tbody>
                 {{range .data}}
                 <tr>
-                    <td><input type="checkbox" name="" lay-skin="primary" data-id="1"></td>
-                    <td class="hidden-xs"><input type="text" name="title" autocomplete="off" class="layui-input" value="0" data-id="1"></td>
+                    <td><input type="checkbox" name="" lay-skin="primary" data-id="1" data-value="{{.name}}"></td>
+                    <td class="hidden-xs"><input type="text" name="spider" autocomplete="off" class="layui-input" value="0" data-id="1"></td>
                     <td>{{.name}}</td>
                     <td>{{.description}}</td>
                     <td><button class="layui-btn layui-btn-xs layui-btn-normal">正常</button></td>
