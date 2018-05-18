@@ -1,6 +1,9 @@
 package history
 
-import "sync"
+import (
+	"sync"
+	"fmt"
+)
 
 //成功记录保存
 type Success struct {
@@ -26,6 +29,14 @@ func (self *Success) flush(provider string) (sLen int, err error){
 	sLen = len(self.new)
 	if sLen == 0 {
 		return
+	}
+	switch provider{
+	case "mgo":
+		fmt.Println("成功记录写入库操作")
+		//storage.Source.MongoDb.Database.C("novel").Count()
+	case "mysql":
+		//同步表
+		//storage.Source.Mysql.Sync2(&FailureModel{})
 	}
 	//TODO::写入库操作
 	return sLen,nil

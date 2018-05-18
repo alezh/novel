@@ -5,7 +5,6 @@ import (
 	"github.com/kataras/iris/sessions"
 	"github.com/kataras/iris/mvc"
 	"strings"
-	"github.com/alezh/novel/config"
 )
 
 type AuthController struct {
@@ -22,12 +21,12 @@ var (
 
 
 func (c *AuthController) BeginRequest(ctx iris.Context) {
-	if "/Admin/login" != ctx.GetCurrentRoute().Path(){
-		c.UserID = c.Session.GetString(config.SessionIDKey)
-		if c.UserID == ""{
-			c.redirect()
-		}
-	}
+	//if "/Admin/login" != ctx.GetCurrentRoute().Path(){
+	//	c.UserID = c.Session.GetString(config.SessionIDKey)
+	//	if c.UserID == ""{
+	//		c.redirect()
+	//	}
+	//}
 }
 
 func (c *AuthController) EndRequest(ctx iris.Context) {}

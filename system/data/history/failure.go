@@ -5,6 +5,7 @@ import (
 	"github.com/alezh/novel/system/http/request"
 	"github.com/alezh/novel/storage"
 	"time"
+	"fmt"
 )
 //失败纪录保保存
 type (
@@ -58,10 +59,11 @@ func (self *Failure) flush(provider string) (fLen int, err error){
 	//TODO::写入库操作
 	switch provider{
 	case "mgo":
-		storage.Source.MongoDb.Database.C("novel").Count()
+		fmt.Println("错误记录写入库操作")
+		//storage.Source.MongoDb.Database.C("novel").Count()
 	case "mysql":
 		//同步表
-		storage.Source.Mysql.Sync2(&FailureModel{})
+		//storage.Source.Mysql.Sync2(&FailureModel{})
 	}
 	return fLen ,nil
 }

@@ -35,26 +35,6 @@ func (c *AdminController)PostAddQueue(form formValue)  {
 	}
 	fmt.Println(spNames)
 
-	spiders := []*spider.Spider{}
-	sp := system.SystemInfo.GetSpiderByName("抓取测试")
-	spiders = append(spiders, sp.Copy())
-	//for _, sp := range system.SystemInfo.GetSpiderLib() {
-	//	for _, spName := range spNames {
-	//		if utils.Atoa(spName) == sp.GetName() {
-	//			spiders = append(spiders, sp.Copy())
-	//		}
-	//	}
-	//}
-	system.SystemInfo.SpiderPrepare(spiders)
-	jsons := iris.Map{"len":system.SystemInfo.GetSpiderQueue().Len(),"sp":spiders}
-	c.Ctx.JSON(jsons)
-}
-
-
-
-
-// 服务器开启 POST :/Admin/engine/start
-func (c *AdminController)PostEngineStart(form formValue)  {
 	var mode = utils.Atoi(form("mode"))
 	var port = utils.Atoi(form("port"))
 	var master = utils.Atoa(form("ip")) //服务器(主节点)地址，不含端口
@@ -64,6 +44,28 @@ func (c *AdminController)PostEngineStart(form formValue)  {
 	}else{
 		system.SystemInfo.ReInit(mode, port, master)
 	}
+
+	spiders := []*spider.Spider{}
+	sp := system.SystemInfo.GetSpiderByName("抓取测试")
+	fmt.Println(sp)
+	spiders = append(spiders, sp.Copy())
+	//for _, sp := range system.SystemInfo.GetSpiderLib() {
+	//	for _, spName := range spNames {
+	//		if utils.Atoa(spName) == sp.GetName() {
+	//			spiders = append(spiders, sp.Copy())
+	//		}
+	//	}
+	//}
+	system.SystemInfo.SpiderPrepare(spiders)
+	jsons := iris.Map{"len":system.SystemInfo.GetSpiderQueue().Len()}
+	c.Ctx.JSON(jsons)
+}
+
+
+
+
+// 服务器开启 POST :/Admin/engine/start
+func (c *AdminController)PostEngineStart(form formValue)  {
 	system.SystemInfo.SetConfig("Mode", config.OFFLINE)
 
 	go func() {
@@ -72,6 +74,7 @@ func (c *AdminController)PostEngineStart(form formValue)  {
 			//Sc.Write(sessID, map[string]interface{}{"operate": "stop"})
 		//}
 	}()
+	c.Ctx.WriteString("go")
 }
 
 func (c *AdminController)PostEngineStop(form formValue)  {

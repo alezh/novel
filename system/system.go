@@ -188,6 +188,7 @@ func (sys *System)Start()  {
 	if sys.SysConfig.Mode != config.CLIENT && sys.SpiderQueue.Len() == 0 {
 		//logs.Log.Warning(" *     —— 亲，任务列表不能为空哦~")
 		//sys.LogRest()
+		fmt.Println(" *     —— 亲，任务列表不能为空哦~")
 		return
 	}
 	sys.finish = make(chan bool)

@@ -4,7 +4,6 @@ import (
 	"sort"
 	"github.com/alezh/novel/system/data/collector"
 	"github.com/alezh/novel/config"
-	"fmt"
 )
 
 // 初始化输出方式列表collector.DataOutputLib

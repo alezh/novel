@@ -31,11 +31,10 @@ func (c *AdminController)Get() mvc.Result{
 }
 // GetIndex handles GET:/Admin/index
 func (c *AdminController)GetIndex() mvc.Result{
-	id:= c.Session.GetString(config.SessionIDKey)
-	if id != ""{
+	if c.UserID != ""{
 		return mvc.View{
 			Name:"admin/default.html",
-			Data:iris.Map{"User":id},
+			Data:iris.Map{"User":c.UserID},
 		}
 	}
 	return mvc.Response{
