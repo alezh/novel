@@ -438,11 +438,11 @@ func (self *System) exec() {
 	// 设置爬虫队列
 	crawlerCap := self.ReptilianPool.Reset(count)
 	fmt.Println(" *     采集引擎池容量为 :", crawlerCap)
-	//logs.Log.Informational(" *     执行任务总数(任务数[*自定义配置数])为 %v 个\n", count)
-	//logs.Log.Informational(" *     采集引擎池容量为 %v\n", crawlerCap)
-	//logs.Log.Informational(" *     并发协程最多 %v 个\n", self.AppConf.ThreadNum)
-	//logs.Log.Informational(" *     默认随机停顿 %v~%v 毫秒\n", self.AppConf.Pausetime/2, self.AppConf.Pausetime*2)
-	//logs.Log.App(" *                                                                                                 —— 开始抓取，请耐心等候 ——")
+	fmt.Printf(" *     执行任务总数(任务数[*自定义配置数])为 %v 个\n", count)
+	fmt.Printf(" *     采集引擎池容量为 %v\n", crawlerCap)
+	fmt.Printf(" *     并发协程最多 %v 个\n", self.SysConfig.ThreadNum)
+	//fmt.Printf(" *     默认随机停顿 %v~%v 毫秒\n", self.SysConfig.Pausetime/2, self.SysConfig.Pausetime*2)
+	fmt.Printf(" *                                                                                                 —— 开始抓取，请耐心等候 ——")
 	//logs.Log.Informational(` *********************************************************************************************************************************** `)
 
 	// 开始计时
@@ -488,20 +488,21 @@ func (self *System) goRun(count int) {
 		s := <-config.ReportChan
 		if (s.DataNum == 0) && (s.FileNum == 0) {
 			//logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   无采集结果，用时 %v！\n", s.SpiderName, s.Keyin, s.Time)
+			fmt.Printf(" *     [任务小计：%s | KEYIN：%s]   无采集结果，用时 %v！\n", s.SpiderName, s.Keyin, s.Time)
 			continue
 		}
 		//logs.Log.Informational(" * ")
-		//switch {
-		//case s.DataNum > 0 && s.FileNum == 0:
-		//	logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条，用时 %v！\n",
-		//		s.SpiderName, s.Keyin, s.DataNum, s.Time)
-		//case s.DataNum == 0 && s.FileNum > 0:
-		//	logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共下载文件 %v 个，用时 %v！\n",
-		//		s.SpiderName, s.Keyin, s.FileNum, s.Time)
-		//default:
-		//	logs.Log.App(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条 + 下载文件 %v 个，用时 %v！\n",
-		//		s.SpiderName, s.Keyin, s.DataNum, s.FileNum, s.Time)
-		//}
+		switch {
+		case s.DataNum > 0 && s.FileNum == 0:
+			fmt.Printf(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条，用时 %v！\n",
+				s.SpiderName, s.Keyin, s.DataNum, s.Time)
+		case s.DataNum == 0 && s.FileNum > 0:
+			fmt.Printf(" *     [任务小计：%s | KEYIN：%s]   共下载文件 %v 个，用时 %v！\n",
+				s.SpiderName, s.Keyin, s.FileNum, s.Time)
+		default:
+			fmt.Printf(" *     [任务小计：%s | KEYIN：%s]   共采集数据 %v 条 + 下载文件 %v 个，用时 %v！\n",
+				s.SpiderName, s.Keyin, s.DataNum, s.FileNum, s.Time)
+		}
 
 		self.sum[0] += s.DataNum
 		self.sum[1] += s.FileNum

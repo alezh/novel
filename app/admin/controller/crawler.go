@@ -8,7 +8,6 @@ import (
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system/spider"
 	"encoding/json"
-	"fmt"
 )
 
 // get:/Admin/crawler/list
@@ -33,8 +32,6 @@ func (c *AdminController)PostAddQueue(form formValue)  {
 	if data != ""{
 		json.Unmarshal([]byte(data), &spNames)
 	}
-	fmt.Println(spNames)
-
 	var mode = utils.Atoi(form("mode"))
 	var port = utils.Atoi(form("port"))
 	var master = utils.Atoa(form("ip")) //服务器(主节点)地址，不含端口
@@ -47,7 +44,6 @@ func (c *AdminController)PostAddQueue(form formValue)  {
 
 	spiders := []*spider.Spider{}
 	sp := system.SystemInfo.GetSpiderByName("抓取测试")
-	fmt.Println(sp)
 	spiders = append(spiders, sp.Copy())
 	//for _, sp := range system.SystemInfo.GetSpiderLib() {
 	//	for _, spName := range spNames {

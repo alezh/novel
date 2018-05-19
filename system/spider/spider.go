@@ -42,6 +42,7 @@ type Spider struct {
 }
 
 func (s *Spider)Register()  *Spider{
+	s.status = config.STOPPED
 	return SpeciesCollection.Load(s)
 }
 

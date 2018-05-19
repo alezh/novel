@@ -3,7 +3,6 @@ package history
 import (
 	"sync"
 	"github.com/alezh/novel/system/http/request"
-	"github.com/alezh/novel/storage"
 	"time"
 	"fmt"
 )
@@ -59,7 +58,7 @@ func (self *Failure) flush(provider string) (fLen int, err error){
 	//TODO::写入库操作
 	switch provider{
 	case "mgo":
-		fmt.Println("错误记录写入库操作")
+		fmt.Println("错误记录写入库操作",self.list)
 		//storage.Source.MongoDb.Database.C("novel").Count()
 	case "mysql":
 		//同步表

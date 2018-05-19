@@ -35,7 +35,7 @@ func (self *Collector) outputData() {
 
 	// 输出统计
 	self.addDataSum(dataLen)
-
+	fmt.Println("执行输出")
 	// 执行输出
 	err := DataOutput[self.outType](self)
 
