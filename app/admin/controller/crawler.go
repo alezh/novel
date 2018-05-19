@@ -7,7 +7,6 @@ import (
 	"github.com/alezh/novel/system/utils"
 	"github.com/alezh/novel/config"
 	"github.com/alezh/novel/system/spider"
-	"encoding/json"
 )
 
 // get:/Admin/crawler/list
@@ -27,11 +26,11 @@ func (c *AdminController)GetCrawlerList()mvc.Result{
 
 // 添加任务 post:/Admin/add/queue
 func (c *AdminController)PostAddQueue(form formValue)  {
-	var spNames map[string]interface{}
+	//var spNames map[string]interface{}
 	data := form("spider")
-	if data != ""{
-		json.Unmarshal([]byte(data), &spNames)
-	}
+	//if data != ""{
+	//	json.Unmarshal([]byte(data), &spNames)
+	//}
 	var mode = utils.Atoi(form("mode"))
 	var port = utils.Atoi(form("port"))
 	var master = utils.Atoa(form("ip")) //服务器(主节点)地址，不含端口
@@ -43,7 +42,7 @@ func (c *AdminController)PostAddQueue(form formValue)  {
 	}
 
 	spiders := []*spider.Spider{}
-	sp := system.SystemInfo.GetSpiderByName("抓取测试")
+	sp := system.SystemInfo.GetSpiderByName(data)
 	spiders = append(spiders, sp.Copy())
 	//for _, sp := range system.SystemInfo.GetSpiderLib() {
 	//	for _, spName := range spNames {

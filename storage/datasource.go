@@ -114,7 +114,7 @@ func (d *DbConfig)Mysql() (*xorm.Engine){
 	return engine
 }
 
-func (m * MgoConfig)MongoDb() *MongoDb {
+func (m *MgoConfig)MongoDb() *MongoDb {
 	if m.MgoConn != ""{
 		//connection := fmt.Sprintf("mongodb://%s/%s?minPoolSize=%d&maxIdleTimeMS=%d", m.MgoConn, m.MgoDB,m.MinPoolSize,m.MaxIdleTimeMS)
 		//fmt.Print(connection)
@@ -132,4 +132,16 @@ func (m * MgoConfig)MongoDb() *MongoDb {
 		return &MongoDb{session,database}
 	}
 	return &MongoDb{nil,nil}
+}
+
+//------------------------------------------------------------mgo 方法 ------------------------------------------------
+
+func (m *MongoDb)InsetAll(table string,pdata... interface{}) bool {
+	coll := m.Database.C(table)
+	err := coll.Insert(pdata...)
+	if err != nil {
+		fmt.Printf("InsertSync error: %v \r\n", err.Error())
+		return false
+	}
+	return true
 }

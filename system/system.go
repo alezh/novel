@@ -442,7 +442,7 @@ func (self *System) exec() {
 	fmt.Printf(" *     采集引擎池容量为 %v\n", crawlerCap)
 	fmt.Printf(" *     并发协程最多 %v 个\n", self.SysConfig.ThreadNum)
 	//fmt.Printf(" *     默认随机停顿 %v~%v 毫秒\n", self.SysConfig.Pausetime/2, self.SysConfig.Pausetime*2)
-	fmt.Printf(" *                                                                                                 —— 开始抓取，请耐心等候 ——")
+	fmt.Printf(" *      —— 开始抓取，请耐心等候 ——\n")
 	//logs.Log.Informational(` *********************************************************************************************************************************** `)
 
 	// 开始计时

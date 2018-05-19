@@ -469,3 +469,25 @@ func String2Bytes(s string) []byte {
 	h := [3]uintptr{x[0], x[1], x[1]}
 	return *(*[]byte)(unsafe.Pointer(&h))
 }
+
+func SubStrings(f ,text ,l string) string{
+	text = strings.TrimSpace(text)
+	if f!= ""{
+		if i := strings.Index(text,f);i>=0{
+			if l != ""{
+				if k := strings.LastIndex(text,l);k>0{
+					c := text[i+len(f):k]
+					return c
+				}
+			}
+			c := text[i+len(f):]
+			return c
+		}
+	}else{
+		if k := strings.Index(text,l);k>0{
+			c := text[:k]
+			return c
+		}
+	}
+	return text
+}
